@@ -5,7 +5,16 @@
     <title>Title</title>
 <body>
 <div id="root">
-    <table>
+    <interventionlist :interventions="interventions"></interventionlist>
+</div>
+
+<script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
+<script>
+    Vue.component('interventionlist', {
+        props: [
+            'interventions'
+        ],
+        template: `<table>
         <tr>
             <th>Numéro</th>
             <th>Type</th>
@@ -16,32 +25,42 @@
             <th>Date Fin</th>
             <th>Créateur</th>
         </tr>
-        <interventionlist :interv="interv" v-for="interv in interventions"></interventionlist>
-    </table>
-</div>
+            <intervention v-for="(interv, index) in interventions"
+             :id="interv.id"
+             :type="interv.type"
+             :intervenant="interv.intervenant"
+             :client="interv.client"
+             :etat="interv.etat"
+             :date_debut="interv.date_debut"
+             :date_fin="interv.date_fin"
+             :createur="interv.createur"
+             :key="index">
+            </intervention>
+         </table>`
 
-<script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
-<script>
-    Vue.component('interventionlist', {
-        props: [
-            'interv'
-        ],
-        template: `<tr>
-                    <listinterv
-                    :id="interv.id"
-                    :type="interv.type"></listinterv>
-                   </tr>`
     })
 
-    Vue.component('listinterv', {
+    Vue.component('intervention', {
         props: [
             'id',
-            'type'
+            'type',
+            'intervenant',
+            'client',
+            'etat',
+            'date_debut',
+            'date_fin',
+            'createur'
         ],
-        template: `<div>
+        template: `<tr>
                     <td>{{id}}</td>
                     <td>{{type}}</td>
-                   </div>`
+                    <td>{{intervenant}}</td>
+                    <td>{{client}}</td>
+                    <td>{{etat}}</td>
+                    <td>{{date_debut}}</td>
+                    <td>{{date_fin}}</td>
+                    <td>{{createur}}</td>
+                   </tr>`
     })
 
     new Vue({
