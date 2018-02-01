@@ -3,9 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+</head>
+<style>
+    .displayNone {
+        display: none;
+    }
+</style>
 <body>
 <div id="root">
     <interventionlist :interventions="interventions"></interventionlist>
+    <button id="addInterv">Ajouter une intervention</button>
+</div>
+
+<div id="formContainer" class="displayNone" >
+    <form action="" method="post" @submit.prevent="catchSubmit()">
+        <input type="text" placeholder="Type d'intervention"/>
+        <input type="submit"/>
+    </form>
 </div>
 
 <script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
@@ -55,7 +69,7 @@
                     <td>{{id}}</td>
                     <td>{{type}}</td>
                     <td>{{intervenant}}</td>
-                    <td>{{client}}</td>
+                    <td>{{client[0].prenom}} {{client[0].nom}}</td>
                     <td>{{etat}}</td>
                     <td>{{date_debut}}</td>
                     <td>{{date_fin}}</td>
@@ -71,207 +85,665 @@
                     id: 1,
                     type: 'Maintenance',
                     intervenant: 'Charles',
-                    client: 'Martin',
                     etat: 'En cours',
                     date_debut: '01/02/2018',
+                    heure_debut: '14:53',
                     date_fin: '02/02/2018',
+                    heure_fin: '09:30',
                     createur: 'Florian',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Bouif',
+                            prenom: 'Martin',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 2,
                     type: 'Installation',
                     intervenant: 'Charlotte',
-                    client: 'Morgane',
                     etat: 'Terminé',
                     date_debut: '06/01/2018',
+                    heure_debut: '09:30',
                     date_fin: '06/01/2018',
+                    heure_fin: '09:30',
                     createur: 'Thomas',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Plouf',
+                            prenom: 'Morgane',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 3,
                     type: 'Maintenance',
                     intervenant: 'Rose',
-                    client: 'Clara',
                     etat: 'A faire',
                     date_debut: '21/12/2017',
+                    heure_debut: '09:30',
                     date_fin: '21/12/2017',
+                    heure_fin: '09:30',
                     createur: 'Capucine',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Morgane',
+                            prenom: 'Clara',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 4,
                     type: 'Maintenance',
                     intervenant: 'Louis',
-                    client: 'Simon',
                     etat: 'A faire',
                     date_debut: '15/02/2018',
+                    heure_debut: '05:35',
                     date_fin: '15/02/2018',
+                    heure_fin: '06:35',
                     createur: 'Tristan',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Judu',
+                            prenom: 'Simon',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 5,
                     type: 'Désinstallation',
                     intervenant: 'Lea',
-                    client: 'Mathis',
                     etat: 'En cours',
                     date_debut: '23/01/2018',
                     date_fin: '23/01/2018',
+                    heure_debut: '05:35',
+                    heure_fin: '06:35',
                     createur: 'Hugo',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Buehzuu',
+                            prenom: 'Mathis',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 6,
                     type: 'Installation',
                     intervenant: 'Elodie',
-                    client: 'Martin',
                     etat: 'A faire',
                     date_debut: '28/01/2018',
+                    heure_debut: '05:35',
+                    heure_fin: '06:35',
                     date_fin: '28/01/2018',
                     createur: 'Capucine',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Matin',
+                            prenom: 'Martin',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 7,
                     type: 'Installation',
                     intervenant: 'Lou',
-                    client: 'Clara',
                     etat: 'Terminé',
                     date_debut: '16/02/2018',
+                    heure_debut: '05:35',
+                    heure_fin: '06:35',
                     date_fin: '16/02/2018',
                     createur: 'Thomas',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Morgane',
+                            prenom: 'Clara',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 8,
                     type: 'Maintenance',
                     intervenant: 'Emilie',
-                    client: 'Eva',
                     etat: 'En cours',
                     date_debut: '19/02/2018',
+                    heure_debut: '05:35',
+                    heure_fin: '06:35',
                     date_fin: '19/02/2018',
                     createur: 'Florian',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Buzeh',
+                            prenom: 'Eva',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 9,
                     type: 'Désinstallation',
                     intervenant: 'Aurelien',
-                    client: 'Simon',
                     etat: 'Terminé',
                     date_debut: '05/01/2018',
+                    heure_debut: '05:35',
+                    heure_fin: '06:35',
                     date_fin: '05/01/2018',
                     createur: 'Anais',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Judu',
+                            prenom: 'Simon',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 10,
                     type: 'Maintenance',
                     intervenant: 'Baptiste',
-                    client: 'Benjamin',
                     etat: 'Terminé',
                     date_debut: '21/11/2017',
+                    heure_debut: '05:35',
+                    heure_fin: '06:35',
                     date_fin: '21/11/2017',
                     createur: 'Jade',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Franklin',
+                            prenom: 'Benjamin',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 11,
                     type: 'Maintenance',
                     intervenant: 'Rose',
-                    client: 'Mathis',
                     etat: 'A faire',
                     date_debut: '26/02/2018',
+                    heure_debut: '05:35',
+                    heure_fin: '06:35',
                     date_fin: '26/02/2018',
                     createur: 'Anais',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Buehzuu',
+                            prenom: 'Mathis',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 12,
                     type: 'Installation',
                     intervenant: 'Lea',
-                    client: 'Lena',
                     etat: 'A faire',
                     date_debut: '26/02/2018',
+                    heure_debut: '05:35',
+                    heure_fin: '06:35',
                     date_fin: '26/02/2018',
                     createur: 'Tristan',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Lekj',
+                            prenom: 'Lena',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 13,
                     type: 'Maintenance',
                     intervenant: 'Charles',
-                    client: 'Sarah',
                     etat: 'A faire',
                     date_debut: '18/02/2018',
                     date_fin: '18/02/2018',
+                    heure_debut: '05:35',
+                    heure_fin: '06:35',
                     createur: 'Clementine',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Connor',
+                            prenom: 'Sarah',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 14,
                     type: 'Maintenance',
                     intervenant: 'Emilie',
-                    client: 'Thomas',
                     etat: 'En cours',
                     date_debut: '03/03/2018',
                     date_fin: '03/03/2018',
+                    heure_debut: '05:35',
+                    heure_fin: '06:35',
                     createur: 'Florian',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Hiei',
+                            prenom: 'Thomas',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 15,
                     type: 'Désinstallation',
                     intervenant: 'Aurélien',
-                    client: 'Morgane',
                     etat: 'A faire',
                     date_debut: '01/02/2018',
                     date_fin: '01/02/2018',
+                    heure_debut: '05:35',
+                    heure_fin: '06:35',
                     createur: 'Jade',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Plouf',
+                            prenom: 'Morgane',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 16,
                     type: 'Maintenance',
                     intervenant: 'Charles',
-                    client: 'Quentin',
                     etat: 'En cours',
                     date_debut: '06/02/2018',
                     date_fin: '06/02/2018',
+                    heure_debut: '05:35',
+                    heure_fin: '06:35',
                     createur: 'Louis',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Nbbie',
+                            prenom: 'Quentin',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 17,
                     type: 'Installation',
                     intervenant: 'Louis',
-                    client: 'Martin',
                     etat: 'A faire',
                     date_debut: '14/02/2018',
                     date_fin: '14/02/2018',
+                    heure_debut: '05:35',
+                    heure_fin: '06:35',
                     createur: 'Lea',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Matin',
+                            prenom: 'Martin',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 18,
                     type: 'Installation',
                     intervenant: 'Charlotte',
-                    client: 'Jean',
                     etat: 'A faire',
                     date_debut: '22/02/2018',
                     date_fin: '22/02/2018',
+                    heure_debut: '05:35',
+                    heure_fin: '06:35',
                     createur: 'Thomas',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Dujardin',
+                            prenom: 'Jean',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 19,
                     type: 'Maintenance',
                     intervenant: 'Lou',
-                    client: 'Mélanie',
                     etat: 'Terminé',
                     date_debut: '02/01/2018',
                     date_fin: '02/01/2018',
+                    heure_debut: '05:35',
+                    heure_fin: '06:35',
                     createur: 'Capucine',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Sgye',
+                            prenom: 'Mélanie',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 },
                 {
                     id: 20,
                     type: 'Maintenance',
                     intervenant: 'Emilie',
-                    client: 'Eva',
                     etat: 'A faire',
                     date_debut: '06/02/2018',
                     date_fin: '06/02/2018',
+                    heure_debut: '05:35',
+                    heure_fin: '06:35',
                     createur: 'Lea',
+                    description: 'Changer le machin de ce client qui a son ordi qui rame.',
+                    commentaires: 'Tout est rentré dans l\'ordre',
+                    produit:[
+                        {
+                            ref:'Hizhai5896',
+                            qte: 1,
+                            libelle: 'Test'
+                        }
+                    ],
+                    client:[
+                        {
+                            nom:'Buzeh',
+                            prenom: 'Eva',
+                            adresse1: '26 rue de la Morandière',
+                            adresse2: '',
+                            cp: '50400',
+                            ville: 'Trifouillis les Oies',
+                            telephone: '0645825325',
+                            mail: 'bouif.martin@gmail.com'
+                        }
+                    ]
                 }
 
             ]
         }
     })
 
+    new Vue ({
+        el:'#formContainer',
+        data: {
+
+        },
+        methods: {
+            catchSubmit(){
+                var formContainer = document.getElementById("formContainer");
+                formContainer.classList.add("displayNone");
+            }
+        }
+    })
+
+    var addBtn = document.getElementById("addInterv");
+    addBtn.addEventListener('click', function(){
+        var formContainer = document.getElementById("formContainer");
+        formContainer.classList.remove("displayNone");
+    })
 </script>
 </body>
 
