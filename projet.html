@@ -10,30 +10,218 @@
 
 <script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
 <script>
-    Vue.component('animal', {
-        props: [
-            'name',
-            'color'
-        ],
-        template: ``
-    })
-
     Vue.component('animaux', {
         props: [
-            'tasks',
-            'title'
         ],
-        data() {
-            return {
-            }
-        },
         template: ``
     })
 
     new Vue({
         el: '#root',
         data: {
+            interventions: [
+                {
+                    id: 1,
+                    type: 'Maintenance',
+                    intervenant: 'Charles',
+                    client: 'Martin',
+                    etat: 'En cours',
+                    date_debut: '01/02/2018',
+                    date_fin: '02/02/2018',
+                    createur: 'Florian',
+                },
+                {
+                    id: 2,
+                    type: 'Installation',
+                    intervenant: 'Charlotte',
+                    client: 'Morgane',
+                    etat: 'Terminé',
+                    date_debut: '06/01/2018',
+                    date_fin: '06/01/2018',
+                    createur: 'Thomas',
+                },
+                {
+                    id: 3,
+                    type: 'Maintenance',
+                    intervenant: 'Rose',
+                    client: 'Clara',
+                    etat: 'A faire',
+                    date_debut: '21/12/2017',
+                    date_fin: '21/12/2017',
+                    createur: 'Capucine',
+                },
+                {
+                    id: 4,
+                    type: 'Maintenance',
+                    intervenant: 'Louis',
+                    client: 'Simon',
+                    etat: 'A faire',
+                    date_debut: '15/02/2018',
+                    date_fin: '15/02/2018',
+                    createur: 'Tristan',
+                },
+                {
+                    id: 5,
+                    type: 'Désinstallation',
+                    intervenant: 'Lea',
+                    client: 'Mathis',
+                    etat: 'En cours',
+                    date_debut: '23/01/2018',
+                    date_fin: '23/01/2018',
+                    createur: 'Hugo',
+                },
+                {
+                    id: 6,
+                    type: 'Installation',
+                    intervenant: 'Elodie',
+                    client: 'Martin',
+                    etat: 'A faire',
+                    date_debut: '28/01/2018',
+                    date_fin: '28/01/2018',
+                    createur: 'Capucine',
+                },
+                {
+                    id: 7,
+                    type: 'Installation',
+                    intervenant: 'Lou',
+                    client: 'Clara',
+                    etat: 'Terminé',
+                    date_debut: '16/02/2018',
+                    date_fin: '16/02/2018',
+                    createur: 'Thomas',
+                },
+                {
+                    id: 8,
+                    type: 'Maintenance',
+                    intervenant: 'Emilie',
+                    client: 'Eva',
+                    etat: 'En cours',
+                    date_debut: '19/02/2018',
+                    date_fin: '19/02/2018',
+                    createur: 'Florian',
+                },
+                {
+                    id: 9,
+                    type: 'Désinstallation',
+                    intervenant: 'Aurelien',
+                    client: 'Simon',
+                    etat: 'Terminé',
+                    date_debut: '05/01/2018',
+                    date_fin: '05/01/2018',
+                    createur: 'Anais',
+                },
+                {
+                    id: 10,
+                    type: 'Maintenance',
+                    intervenant: 'Baptiste',
+                    client: 'Benjamin',
+                    etat: 'Terminé',
+                    date_debut: '21/11/2017',
+                    date_fin: '21/11/2017',
+                    createur: 'Jade',
+                },
+                {
+                    id: 11,
+                    type: 'Maintenance',
+                    intervenant: 'Rose',
+                    client: 'Mathis',
+                    etat: 'A faire',
+                    date_debut: '26/02/2018',
+                    date_fin: '26/02/2018',
+                    createur: 'Anais',
+                },
+                {
+                    id: 12,
+                    type: 'Installation',
+                    intervenant: 'Lea',
+                    client: 'Lena',
+                    etat: 'A faire',
+                    date_debut: '26/02/2018',
+                    date_fin: '26/02/2018',
+                    createur: 'Tristan',
+                },
+                {
+                    id: 13,
+                    type: 'Maintenance',
+                    intervenant: 'Charles',
+                    client: 'Sarah',
+                    etat: 'A faire',
+                    date_debut: '18/02/2018',
+                    date_fin: '18/02/2018',
+                    createur: 'Clementine',
+                },
+                {
+                    id: 14,
+                    type: 'Maintenance',
+                    intervenant: 'Emilie',
+                    client: 'Thomas',
+                    etat: 'En cours',
+                    date_debut: '03/03/2018',
+                    date_fin: '03/03/2018',
+                    createur: 'Florian',
+                },
+                {
+                    id: 15,
+                    type: 'Désinstallation',
+                    intervenant: 'Aurélien',
+                    client: 'Morgane',
+                    etat: 'A faire',
+                    date_debut: '01/02/2018',
+                    date_fin: '01/02/2018',
+                    createur: 'Jade',
+                },
+                {
+                    id: 16,
+                    type: 'Maintenance',
+                    intervenant: 'Charles',
+                    client: 'Quentin',
+                    etat: 'En cours',
+                    date_debut: '06/02/2018',
+                    date_fin: '06/02/2018',
+                    createur: 'Louis',
+                },
+                {
+                    id: 17,
+                    type: 'Installation',
+                    intervenant: 'Louis',
+                    client: 'Martin',
+                    etat: 'A faire',
+                    date_debut: '14/02/2018',
+                    date_fin: '14/02/2018',
+                    createur: 'Lea',
+                },
+                {
+                    id: 18,
+                    type: 'Installation',
+                    intervenant: 'Charlotte',
+                    client: 'Jean',
+                    etat: 'A faire',
+                    date_debut: '22/02/2018',
+                    date_fin: '22/02/2018',
+                    createur: 'Thomas',
+                },
+                {
+                    id: 19,
+                    type: 'Maintenance',
+                    intervenant: 'Lou',
+                    client: 'Mélanie',
+                    etat: 'Terminé',
+                    date_debut: '02/01/2018',
+                    date_fin: '02/01/2018',
+                    createur: 'Capucine',
+                },
+                {
+                    id: 20,
+                    type: 'Maintenance',
+                    intervenant: 'Emilie',
+                    client: 'Eva',
+                    etat: 'A faire',
+                    date_debut: '06/02/2018',
+                    date_fin: '06/02/2018',
+                    createur: 'Lea',
+                },
 
+            ]
         }
     })
 
