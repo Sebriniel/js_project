@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<body>
+<div id="root">
+
+</div>
+
+<script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
+<script>
+    Vue.component('animal', {
+        props: [
+            'name',
+            'color'
+        ],
+        template: ``
+    })
+
+    Vue.component('animaux', {
+        props: [
+            'tasks',
+            'title'
+        ],
+        data() {
+            return {
+
+            }
+        },
+        template: ``
+    })
+
+    new Vue({
+        el: '#root',
+        data: {
+            
+        }
+    })
+
+</script>
+</body>
+</html>
+
