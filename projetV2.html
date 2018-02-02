@@ -812,7 +812,9 @@
             catchSubmit(){
                 var formContainer = document.getElementById("formContainer");
                 formContainer.classList.add("displayNone");
-                var id = (this.interventions.length);
+                var idLastInterv = this.interventions.length-1;
+//                console.log(this.interventions[idLastInterv].id);
+                var id = this.interventions[idLastInterv].id;
                 this.interventions.push({
                     id: id+1,
                     type: this.type,
