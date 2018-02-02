@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Interventions</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="addFormStyle.css">
 </head>
 <style>
     .displayNone {
@@ -10,42 +12,45 @@
     }
 </style>
 <body>
+<h1 class="display-4">Interventions</h1>
 <div id="root">
     <interventionlist :interventions="interventions"></interventionlist>
-    <button id="addInterv">Ajouter une intervention</button>
-    <div id="formContainer" class="displayNone" >
-        <form action="" method="post" @submit.prevent="catchSubmit()">
-            <select name="type" id="type" v-model="type">
-                <option>Maintenance
-                <option>Installation
-                <option>Désinstallation
-            </select>
-            <input type="text" placeholder="Intervenant" v-model="intervenant"/>
-            <input type="text" value="A faire" readonly/>
-            <div id="coordClient">
-                <input type="text" placeholder="Nom client" v-model="nom"/>
-                <input type="text" placeholder="Prénom client" v-model="prenom"/>
-                <input type="text" placeholder="Adresse 1" v-model="adresse1"/>
-                <input type="text" placeholder="Adresse 2" v-model="adresse2"/>
-                <input type="text" placeholder="Code postal" v-model="cp"/>
-                <input type="text" placeholder="Ville" v-model="ville"/>
-                <input type="text" placeholder="Telephone" v-model="telephone"/>
-                <input type="text" placeholder="Mail" v-model="mail"/>
-            </div>
-            <input type="text" placeholder="Date de début" v-model="date_debut"/>
-            <input type="text" placeholder="Heure de début" v-model="heure_debut"/>
-            <input type="text" placeholder="Date de fin" v-model="date_fin"/>
-            <input type="text" placeholder="Heure de fin" v-model="heure_fin"/>
-            <input type="text" placeholder="Créateur" v-model="createur"/>
-            <textarea name="description" cols="30" rows="10" placeholder="Description de l'intervention" v-model="description"></textarea>
-            <textarea name="commentaires" cols="30" rows="10" placeholder="Commentaires de l'intervenant" v-model="commentaires"></textarea>
-            <div id="refProduit">
-                <input type="text" placeholder="Référence produit" v-model="ref"/>
-                <input type="text" placeholder="Quantité produit" v-model="qte"/>
-                <input type="text" placeholder="Libellé produit" v-model="libelle"/>
-            </div>
-            <input type="submit"/>
-        </form>
+    <div id="addForm">
+        <button id="addInterv" class="btn btn-secondary">Ajouter une intervention</button>
+        <div id="formContainer" class="displayNone" >
+            <form action="" method="post" @submit.prevent="catchSubmit()">
+                <select name="type" id="type" v-model="type">
+                    <option>Maintenance
+                    <option>Installation
+                    <option>Désinstallation
+                </select>
+                <input type="text" placeholder="Intervenant" v-model="intervenant"/>
+                <input type="text" value="A faire" readonly/>
+                <div id="coordClient">
+                    <input type="text" placeholder="Nom client" v-model="nom"/>
+                    <input type="text" placeholder="Prénom client" v-model="prenom"/>
+                    <input type="text" placeholder="Adresse 1" v-model="adresse1"/>
+                    <input type="text" placeholder="Adresse 2" v-model="adresse2"/>
+                    <input type="text" placeholder="Code postal" v-model="cp"/>
+                    <input type="text" placeholder="Ville" v-model="ville"/>
+                    <input type="text" placeholder="Telephone" v-model="telephone"/>
+                    <input type="text" placeholder="Mail" v-model="mail"/>
+                </div>
+                <input type="text" placeholder="Date de début" v-model="date_debut"/>
+                <input type="text" placeholder="Heure de début" v-model="heure_debut"/>
+                <input type="text" placeholder="Date de fin" v-model="date_fin"/>
+                <input type="text" placeholder="Heure de fin" v-model="heure_fin"/>
+                <input type="text" placeholder="Créateur" v-model="createur"/>
+                <textarea name="description" cols="30" rows="10" placeholder="Description de l'intervention" v-model="description"></textarea>
+                <textarea name="commentaires" cols="30" rows="10" placeholder="Commentaires de l'intervenant" v-model="commentaires"></textarea>
+                <div id="refProduit">
+                    <input type="text" placeholder="Référence produit" v-model="ref"/>
+                    <input type="text" placeholder="Quantité produit" v-model="qte"/>
+                    <input type="text" placeholder="Libellé produit" v-model="libelle"/>
+                </div>
+                <input type="submit" class="btn btn-secondary"/>
+            </form>
+        </div>
     </div>
 </div>
 

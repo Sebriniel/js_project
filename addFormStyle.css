@@ -1,0 +1,32 @@
+body {
+    margin: 10px 0 0 10px;
+}
+
+#root {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+h1 {
+    margin: 0 0 20px 0;
+    text-align: center;
+}
+
+#addForm{
+    width: 40%;
+    margin-left: 50px;
+}
+
+table {
+    text-align: center;
+    margin: 0 0 20px 0;
+}
+
+#addInterv{
+    height: 8%;
+}
+
+td {
+    padding: 0 15px;
+}
