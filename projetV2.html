@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <title>Interventions</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="jquery_validation_engine/css/validationEngine.jquery.css" type="text/css"/>
     <link rel="stylesheet" href="addFormStyle.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery_validation_engine/js/jquery.valildationEngine.js"></script>
+    <script type="text/javascript" src="jquery_validation_engine/js/jquery.validationEngine-en.js"></script>
 </head>
 <style>
     .displayNone {
@@ -18,14 +22,19 @@
     <div id="addForm">
         <button id="addInterv" class="btn btn-secondary">Ajouter une intervention</button>
         <div id="formContainer" class="displayNone" >
-            <form action="" method="post" @submit.prevent="catchSubmit()">
-                <select name="type" id="type" v-model="type">
-                    <option>Maintenance
-                    <option>Installation
-                    <option>Désinstallation
-                </select>
-                <input type="text" placeholder="Intervenant" v-model="intervenant"/>
-                <input type="text" value="A faire" readonly/>
+            <form action="" method="post" @submit.prevent="catchSubmit()" id="form">
+                <h4>Informations principales</h4>
+                <div id="intervInfo">
+                    <select name="type" id="type" v-model="type">
+                        <option>Maintenance
+                        <option>Installation
+                        <option>Désinstallation
+                    </select>
+                    <input type="text" placeholder="Intervenant" v-model="intervenant"/>
+                    <input type="text" value="A faire" readonly/>
+                </div>
+
+                <h4>Client</h4>
                 <div id="coordClient">
                     <input type="text" placeholder="Nom client" v-model="nom"/>
                     <input type="text" placeholder="Prénom client" v-model="prenom"/>
@@ -36,24 +45,44 @@
                     <input type="text" placeholder="Telephone" v-model="telephone"/>
                     <input type="text" placeholder="Mail" v-model="mail"/>
                 </div>
-                <input type="text" placeholder="Date de début" v-model="date_debut"/>
-                <input type="text" placeholder="Heure de début" v-model="heure_debut"/>
-                <input type="text" placeholder="Date de fin" v-model="date_fin"/>
-                <input type="text" placeholder="Heure de fin" v-model="heure_fin"/>
-                <input type="text" placeholder="Créateur" v-model="createur"/>
-                <textarea name="description" cols="30" rows="10" placeholder="Description de l'intervention" v-model="description"></textarea>
-                <textarea name="commentaires" cols="30" rows="10" placeholder="Commentaires de l'intervenant" v-model="commentaires"></textarea>
+
+                <h4>Dates et heures</h4>
+                <div id="dates">
+                    <input type="text" placeholder="Date de début" v-model="date_debut"/>
+                    <input type="text" placeholder="Heure de début" v-model="heure_debut"/>
+                    <input type="text" placeholder="Date de fin" v-model="date_fin"/>
+                    <input type="text" placeholder="Heure de fin" v-model="heure_fin"/>
+                </div>
+
+                <div>
+                    <input type="text" placeholder="Créateur" v-model="createur"/>
+                </div>
+
+                <h4>Produit</h4>
                 <div id="refProduit">
                     <input type="text" placeholder="Référence produit" v-model="ref"/>
                     <input type="text" placeholder="Quantité produit" v-model="qte"/>
                     <input type="text" placeholder="Libellé produit" v-model="libelle"/>
                 </div>
-                <input type="submit" class="btn btn-secondary"/>
+
+                <h4>Descriptions et commentaires</h4>
+                <div id="textareas">
+                    <textarea name="description" cols="30" rows="10" placeholder="Description de l'intervention" v-model="description"></textarea>
+                    <textarea name="commentaires" cols="30" rows="10" placeholder="Commentaires de l'intervenant" v-model="commentaires"></textarea>
+                </div>
+
+                <input type="submit" class="btn btn-secondary" id="submit"/>
+            </form>
+        </div>
+        <button id="removeInterv" class="btn btn-secondary">Supprimer une intervention</button>
+        <div id="removeFormContainer" class=" displayNone">
+            <form action="" method="post"  @submit.prevent="catchRemove()">
+                <input type="text" placeholder="Numéro de l'intervention" v-model="idInterv">
+                <input type="submit">
             </form>
         </div>
     </div>
 </div>
-
 
 
 <script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
@@ -134,6 +163,7 @@
             ville: '',
             telephone:'',
             mail:'',
+            idInterv:'',
             interventions: [
                 {
                     id: 1,
@@ -835,6 +865,19 @@
                 this.ville = "";
                 this.telephone = "";
                 this.mail = "";
+            },
+
+            catchRemove(){
+                var removeFormContainer = document.getElementById("removeFormContainer");
+                removeFormContainer.classList.add("displayNone");
+                var idInterv = this.idInterv;
+                if (window.confirm("Êtes vous sûr de vouloir supprimer l'intervention " + idInterv + " ?")){
+                    for(i=0; i<this.interventions.length; i++){
+                        if (this.interventions[i].id == idInterv){
+                            this.interventions.splice(i, 1);
+                        }
+                    }
+                }
             }
         }
     });
@@ -844,6 +887,12 @@
     addBtn.addEventListener('click', function(){
         var formContainer = document.getElementById("formContainer");
         formContainer.classList.remove("displayNone");
+    })
+
+    var removeBtn = document.getElementById("removeInterv");
+    removeBtn.addEventListener('click', function(){
+        var removeForm = document.getElementById("removeFormContainer");
+        removeForm.classList.remove("displayNone");
     })
 </script>
 </body>
