@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Interventions</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
     <link rel="stylesheet" href="addFormStyle.css">
     <link rel="stylesheet" href="jquery-ui-themes-1.12.1/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
-<style>
-    .displayNone {
-        display: none;
-    }
-</style>
+
 <body>
 <h1 class="display-4">Interventions</h1>
 <div id="root">
+    <nbrintervention class="textColor"></nbrintervention>
     <interventionlist :interventions="interventions"></interventionlist>
+    <pagination></pagination>
     <div id="addForm">
         <button id="addInterv" class="btn btn-secondary">Ajouter une intervention</button>
         <div id="formContainer" class="displayNone" >
@@ -83,24 +84,278 @@
 </div>
 
 
-<script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
+<script src="vue.js"></script>
+<script src="vuex.js"></script>
 <script>
+
+    Vue.use(Vuex);
+
+    const store = new Vuex.Store({
+        state: {
+            select: 0,
+            totalInterv: 0,
+            currentPage: 1,
+            startSlice: 0,
+            changePage: false,
+            prev: false,
+            next: false,
+            index: 0,
+        },
+        getters: {
+            getterSelect: state => {
+                return state.select
+            },
+            getterTotalInterv: state => {
+                return state.totalInterv
+            },
+            getterCurrentPage: state => {
+                return state.currentPage
+            },
+            getterStartSlice: state => {
+                return state.startSlice
+            },
+            getterChangePage: state => {
+                return state.changePage
+            },
+            getterPrev: state => {
+                return state.prev
+            },
+            getterNext: state => {
+                return state.next
+            },
+            getterIndex: state => {
+                return state.index
+            },
+        },
+        mutations: {
+            editSelect: (state, newValue) => {
+                state.select = newValue
+            },
+            sendTotalPages: (state, newValue) => {
+                state.totalInterv = newValue
+            },
+            editCurrentPage: (state, newValue) => {
+                state.currentPage = newValue
+            },
+            editStartSlice: (state, newValue) => {
+                state.startSlice = newValue
+            },
+            editChangePage: (state, newValue) => {
+                state.changePage = newValue
+            },
+            editPrev: (state, newValue) => {
+                state.prev = newValue
+            },
+            editNext: (state, newValue) => {
+                state.next = newValue
+            },
+            editIndex: (state, newValue) => {
+                state.index = newValue
+            }
+        }
+    })
+
+
+    Vue.component('nbrintervention', {
+        data() {
+            return {
+                value: 10,
+            }
+        },
+        methods: {
+            getSelect(){
+                store.commit('editStartSlice', 0) // select value change => init tab slice(0, selectVal)
+                store.commit('editCurrentPage', 1) // select value change => init current page = 1
+                store.commit('editSelect', parseInt(this.value)) // save select value AND typeof(this.value) = string
+                store.commit('editChangePage', false) // select value change => init pagination => classic prev-- / next++
+            }
+        },
+        template: `
+            <select v-model="value" @change="getSelect()">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+            </select>
+        `,
+    })
+
+
+    Vue.component('pagination', {
+        data() {
+            return {
+                nbrPagination: 0,
+                myCurrentPage: 1,
+            }
+        },
+        computed: {
+            nbrPages() { // nbr pagination
+                let itemsPerPage = store.getters.getterSelect,
+                    totalInterv = store.getters.getterTotalInterv
+
+                itemsPerPage === 0 ? itemsPerPage = 10 : itemsPerPage
+
+                this.nbrPagination = Math.ceil(totalInterv / itemsPerPage)
+                this.myCurrentPage = 1
+
+                return this.nbrPagination
+            },
+        },
+        methods: {
+            next(){
+                let curPage = store.getters.getterCurrentPage,
+                    next = store.getters.getterNext,
+                    index = store.getters.getterIndex,
+                    bolChangePage = store.getters.getterChangePage
+
+                if(bolChangePage === true){ // pagination selected => next with index value
+                    next = true
+                    store.commit('editNext', next)
+
+                    if(this.myCurrentPage < this.nbrPagination){
+                        index += 1
+                        this.myCurrentPage = index + 1
+                        store.commit('editIndex', index)
+                        store.commit('editCurrentPage', this.myCurrentPage)
+                    }
+                }
+                else{ // classic next => current page + 1
+                    curPage === 1 ? this.myCurrentPage = 1 : ''
+                    this.myCurrentPage < this.nbrPagination ? this.myCurrentPage++ : ''
+                    curPage = this.myCurrentPage
+
+                    store.commit('editCurrentPage', curPage)
+                }
+            },
+            prev(){
+                let curPage = store.getters.getterCurrentPage,
+                    prev = store.getters.getterPrev,
+                    index = store.getters.getterIndex,
+                    bolChangePage = store.getters.getterChangePage
+
+                if(bolChangePage === true){ // pagination selected => prev with index value
+                    if(this.myCurrentPage > 1){
+
+                        prev = true
+                        index -= 1
+                        this.myCurrentPage = index + 1
+
+                        store.commit('editIndex', index)
+                        store.commit('editCurrentPage', this.myCurrentPage)
+                        store.commit('editPrev', prev)
+                    }
+                }else{ // classic prev => current page - 1
+                    this.myCurrentPage > 1 ? this.myCurrentPage-- : ''
+                    curPage = this.myCurrentPage
+
+                    store.commit('editCurrentPage', curPage)
+                }
+            },
+            goTo(index){ // pagination selected
+                this.myCurrentPage = index + 1
+
+                store.commit('editIndex', index)
+                store.commit('editCurrentPage', index)
+                store.commit('editChangePage', true)
+            },
+            displayPagination(){
+                let itemsPerPage = store.getters.getterSelect,
+                    totalInterv = store.getters.getterTotalInterv
+
+                return itemsPerPage !== totalInterv
+            }
+        },
+        template: `
+        <div id="pagination" v-if="displayPagination()">
+            <a href="#" @click="prev()">&laquo;</a>
+                <span v-for="(pageNumber, index) in nbrPages">
+                    <a v-if="index === (myCurrentPage - 1)" class="active">{{pageNumber}}</a>
+                    <a v-else @click="goTo(index)">{{pageNumber}}</a>
+                </span>
+            <a href="#" @click="next()">&raquo;</a>
+        </div>
+        `,
+    })
+
+
     Vue.component('interventionlist', {
+        data() {
+            return {
+                curPage: 1,
+            }
+        },
         props: [
-            'interventions'
+            'interventions',
         ],
-        template: `<table>
-        <tr>
-            <th>Numéro</th>
-            <th>Type</th>
-            <th>Intervenant</th>
-            <th>Client</th>
-            <th>Etat</th>
-            <th>Date Début</th>
-            <th>Date Fin</th>
-            <th>Créateur</th>
-        </tr>
-            <intervention v-for="(interv, index) in interventions"
+        computed: {
+            filterBy() {
+                let totalInterventions = this.interventions.length,
+                    getCurPage =  store.getters.getterCurrentPage,
+                    selectVal = store.getters.getterSelect,
+                    startSlice = store.getters.getterStartSlice,
+                    bolChangePage = store.getters.getterChangePage,
+                    index =  store.getters.getterIndex,
+                    prev = store.getters.getterPrev,
+                    next = store.getters.getterNext
+
+                getCurPage === 1 ? this.curPage = 1 : ''
+                selectVal === 0 ? selectVal = 10 : 0
+                store.commit('sendTotalPages', totalInterventions)
+
+                if(bolChangePage === true){ //select page ? => true
+                    if(next === true){ // next page
+
+                        startTab = index * selectVal
+                        store.commit('editNext', false)
+
+                        return this.interventions.slice(startTab, (startTab  + selectVal))
+                    }else if(prev === true){ // prev page
+
+                        startTab = getCurPage * selectVal
+                        store.commit('editPrev', false)
+
+                        return this.interventions.slice((startTab - selectVal), startTab)
+                    }else{
+                        startTab = getCurPage * selectVal
+
+                        return this.interventions.slice(startTab, (startTab  + selectVal))
+                    }
+                }else{ //select page ? => false => classic pagination => nextPage++ / prevPage--
+                    if(getCurPage > this.curPage){  // next page
+
+                        startSlice += selectVal
+                        store.commit('editStartSlice', startSlice)
+                        this.curPage = getCurPage
+
+                        return this.interventions.slice(startSlice, (startSlice  + selectVal))
+                    }else if(getCurPage < this.curPage){ // prev page
+
+                        startSlice -= selectVal
+                        store.commit('editStartSlice', startSlice)
+                        this.curPage = getCurPage
+
+                        return this.interventions.slice(startSlice, startSlice + selectVal)
+                    }else{ // init tab => slice(0,10)
+                        store.commit('editStartSlice', 0)
+                        return this.interventions.slice(0, selectVal)
+                    }
+                }
+            }
+        },
+        template: `
+        <table>
+            <tr>
+                <th>Numéro</th>
+                <th>Type</th>
+                <th>Intervenant</th>
+                <th>Client</th>
+                <th>Etat</th>
+                <th>Date Début</th>
+                <th>Date Fin</th>
+                <th>Créateur</th>
+            </tr>
+
+            <intervention v-for="(interv, index) in filterBy"
              :id="interv.id"
              :type="interv.type"
              :intervenant="interv.intervenant"
@@ -111,8 +366,7 @@
              :createur="interv.createur"
              :key="index">
             </intervention>
-         </table>`
-
+        </table>`,
     })
 
     Vue.component('intervention', {
@@ -126,17 +380,18 @@
             'date_fin',
             'createur'
         ],
-        template: `<tr>
-                    <td>{{id}}</td>
-                    <td>{{type}}</td>
-                    <td>{{intervenant}}</td>
-                    <td>{{client[0].prenom}} {{client[0].nom}}</td>
-                    <td>{{etat}}</td>
-                    <td>{{date_debut}}</td>
-                    <td>{{date_fin}}</td>
-                    <td>{{createur}}</td>
-                    <td><button class="redirectBtn">Voir</button></td>
-                   </tr>`
+        template: `
+        <tr>
+            <td>{{id}}</td>
+            <td>{{type}}</td>
+            <td>{{intervenant}}</td>
+            <td>{{client[0].prenom}} {{client[0].nom}}</td>
+            <td>{{etat}}</td>
+            <td>{{date_debut}}</td>
+            <td>{{date_fin}}</td>
+            <td>{{createur}}</td>
+            <td><button class="redirectBtn">Voir</button></td>
+        </tr>`
     })
 
     new Vue({
@@ -870,9 +1125,7 @@
                     this.telephone = "";
                     this.mail = "";
                 }
-
             },
-
             catchRemove(){
                 if(this.idInterv!=""){
                     var removeFormContainer = document.getElementById("removeFormContainer");
@@ -896,7 +1149,6 @@
                 }else {
                     alert('Merci de remplir les champs requis!')
                 }
-
             }
         }
     });

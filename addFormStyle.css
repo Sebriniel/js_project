@@ -2,11 +2,11 @@ body {
     margin: 10px 0 0 10px;
 }
 
-#root {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-}
+/*#root {*/
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*justify-content: space-around;*/
+/*}*/
 
 h1 {
     margin: 0 0 20px 0;
@@ -62,3 +62,27 @@ td {
 #btnRemove {
     margin-left: 20px;
 }
+
+.displayNone {display: none;}
+
+#pagination {display: inline-block;}
+
+#pagination a {
+    color: #575757;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+    margin: 0 4px;
+    cursor: pointer;
+}
+
+#pagination a:hover:not(.active) {background-color: #ddd;}
+
+.active{
+    background-color: #00d1b2;
+    color: white !important;
+}
+
+.textColor{color: #575757;}
