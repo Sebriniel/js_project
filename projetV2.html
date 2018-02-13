@@ -390,7 +390,7 @@
             <td>{{date_debut}}</td>
             <td>{{date_fin}}</td>
             <td>{{createur}}</td>
-            <td><button class="redirectBtn">Voir</button></td>
+            <td><button class="redirectBtn" :id="id">Voir</button></td>
         </tr>`
     })
 
@@ -1149,6 +1149,10 @@
                 }else {
                     alert('Merci de remplir les champs requis!')
                 }
+            },
+            redirect(){
+                var urlStr = 'details.html' + '?id="' + this.interventions.id + '"';
+                console.log(urlStr);
             }
         }
     });
@@ -1166,12 +1170,25 @@
         removeForm.classList.remove("displayNone");
     })
 
+//    var redirectBtn = document.getElementsByClassName("redirectBtn");
+//    for (var i=0; i<redirectBtn.length; i++){
+//        redirectBtn[i].addEventListener('click', function(){
+//            var id = redirectBtn[i].id;
+//            var urlStr = 'details.html' + '?id="' + id + '"';
+//            console.log(urlStr);
+//            //document.location.href="details.html";
+//        })
+//    }
     var redirectBtn = document.getElementsByClassName("redirectBtn");
-    for (var i=0; i<redirectBtn.length; i++){
-        redirectBtn[i].addEventListener('click', function(){
-            var urlStr = 'details.html' + '?id="' + this.interventions.id + '"';
-            console.log(urlStr);
-            //document.location.href="details.html";
+    console.log(redirectBtn.length)
+    var btnVoir;
+    var urlStr;
+
+    for(i=1; i<=redirectBtn.length; i++){
+        btnVoir = document.getElementById(i.toString());
+        btnVoir.addEventListener('click', function(){
+            urlStr = 'details.html' + '?id="' + this.id + '"';
+            console.log(urlStr)
         })
     }
 
