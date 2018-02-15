@@ -364,7 +364,8 @@
              :date_debut="interv.date_debut"
              :date_fin="interv.date_fin"
              :createur="interv.createur"
-             :key="index">
+             :key="index"
+             :href="interv.href">
             </intervention>
         </table>`,
     })
@@ -378,11 +379,12 @@
             'etat',
             'date_debut',
             'date_fin',
-            'createur'
+            'createur',
+            'href'
         ],
         template: `
         <tr>
-            <td>{{id}}</td>
+            <td><a :href="href">{{id}}</a></td>
             <td>{{type}}</td>
             <td>{{intervenant}}</td>
             <td>{{client[0].prenom}} {{client[0].nom}}</td>
@@ -431,6 +433,7 @@
                     createur: 'Florian',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=1',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -463,6 +466,7 @@
                     createur: 'Thomas',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=2',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -495,6 +499,7 @@
                     createur: 'Capucine',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=3',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -527,6 +532,7 @@
                     createur: 'Tristan',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=4',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -559,6 +565,7 @@
                     createur: 'Hugo',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=5',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -591,6 +598,7 @@
                     createur: 'Capucine',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=6',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -623,6 +631,7 @@
                     createur: 'Thomas',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=7',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -655,6 +664,7 @@
                     createur: 'Florian',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=8',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -687,6 +697,7 @@
                     createur: 'Anais',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=9',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -719,6 +730,7 @@
                     createur: 'Jade',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=10',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -751,6 +763,7 @@
                     createur: 'Anais',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=11',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -783,6 +796,7 @@
                     createur: 'Tristan',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=12',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -815,6 +829,7 @@
                     createur: 'Clementine',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=13',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -847,6 +862,7 @@
                     createur: 'Florian',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=14',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -879,6 +895,7 @@
                     createur: 'Jade',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=15',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -911,6 +928,7 @@
                     createur: 'Louis',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=16',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -943,6 +961,7 @@
                     createur: 'Lea',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=17',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -975,6 +994,7 @@
                     createur: 'Thomas',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=18',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -1007,6 +1027,7 @@
                     createur: 'Capucine',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=19',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -1039,6 +1060,7 @@
                     createur: 'Lea',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
+                    href: 'details.html?id=20',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -1083,6 +1105,7 @@
                         createur: this.createur,
                         description: this.description,
                         commentaires: this.commentaires,
+                        href: 'details.html?id="' + this.id + '"',
                         produit: [
                             {
                                 ref: this.ref,
@@ -1112,7 +1135,8 @@
                     this.heure_fin = "";
                     this.createur = "";
                     this.description = "";
-                    this.commentaires = ""
+                    this.commentaires = "";
+                    this.href = "";
                     this.ref = "";
                     this.qte = "";
                     this.libelle = "";
