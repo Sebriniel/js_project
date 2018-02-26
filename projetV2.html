@@ -81,6 +81,63 @@
             </form>
         </div>
     </div>
+
+    <div id="detailsForm">
+        <div id="formContainerDetails" class="displayNone" >
+            <form action="" method="post" id="myFormDetails" @submit.prevent="catchModifDetails">
+                <h4>Informations principales</h4>
+                <div id="intervInfoDetails">
+                    <select name="type" id="typeDetails" v-model="type">
+                        <option>Maintenance
+                        <option>Installation
+                        <option>Désinstallation
+                    </select>
+                    <input type="text" id="intervenantDetails" v-model="intervenant"/>
+                    <input type="text" id="etatDetails" readonly/>
+                </div>
+
+                <h4>Client</h4>
+                <div id="coordClientDetails">
+                    <input type="text" id="nomClientDetails" v-model="nom"  />
+                    <input type="text" id="prenomClientDetails" v-model="prenom"  />
+                    <input type="text" id="adresse1ClientDetails" v-model="adresse1"  />
+                    <input type="text" id="adresse2ClientDetails" v-model="adresse2"/>
+                    <input type="text" id="cpClientDetails" v-model="cp"  />
+                    <input type="text" id="villeClientDetails" v-model="ville"  />
+                    <input type="text" id="telephoneClientDetails" v-model="telephone"  />
+                    <input type="text" id="mailClientDetails" v-model="mail"/>
+                </div>
+
+                <h4>Dates et heures</h4>
+                <div id="datesDetails">
+                    <input type="text" v-model="date_debut"   id="datepickerDetails"/>
+                    <input type="text" id="heureDebutDetails" v-model="heure_debut"/>
+                    <input type="text" id="dateFinDetails" v-model="date_fin"  />
+                    <input type="text" id="heureFinDetails" v-model="heure_fin"/>
+                </div>
+
+                <div>
+                    <input type="text" id="createurDetails" v-model="createur"  />
+                </div>
+
+                <h4>Produit</h4>
+                <div id="refProduitDetails">
+                    <input type="text" id="refDetails" v-model="ref"/>
+                    <input type="text" id="qteProduitDetails" v-model="qte"/>
+                    <input type="text" id="libelleProduitDetails" v-model="libelle"/>
+                </div>
+
+                <h4>Descriptions et commentaires</h4>
+                <div id="textareasDetails">
+                    <textarea name="description" id="descriptionDetails" cols="30" rows="10" v-model="description"></textarea>
+                    <textarea name="commentaires" id="commentairesDetails" cols="30" rows="10" v-model="commentaires"></textarea>
+                </div>
+
+                <input type="button" class="btn btn-secondary" id="modifierDetailsBtn" value="Modifier" />
+                <input type="submit" class="btn btn-secondary displayNone" id="enregDetailsBtn" value="Enregistrer"/>
+            </form>
+        </div>
+    </div>
 </div>
 
 
@@ -100,6 +157,7 @@
             prev: false,
             next: false,
             index: 0,
+            idInterv: 0,
         },
         getters: {
             getterSelect: state => {
@@ -126,6 +184,9 @@
             getterIndex: state => {
                 return state.index
             },
+            getterIdInterv: state => {
+                return state.idInterv
+            },
         },
         mutations: {
             editSelect: (state, newValue) => {
@@ -151,6 +212,9 @@
             },
             editIndex: (state, newValue) => {
                 state.index = newValue
+            },
+            editIdInterv: (state, newValue) => {
+                state.idInterv = newValue
             }
         }
     })
@@ -392,10 +456,18 @@
             <td>{{date_debut}}</td>
             <td>{{date_fin}}</td>
             <td>{{createur}}</td>
-        </tr>`
+            <td><a href="#formContainerDetails"><button @click="eventDetails(id)">Voir</button></a></td>
+        </tr>`,
+        methods: {
+            eventDetails(id){
+                vm.eventDetails(id)
+                var formContainerDetails = document.getElementById("formContainerDetails")
+                formContainerDetails.classList.toggle("displayNone")
+            }
+        }
     })
 
-    new Vue({
+    var vm = new Vue({
         el: '#root',
         data: {
             type: '',
@@ -432,7 +504,6 @@
                     createur: 'Florian',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=1',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -444,7 +515,7 @@
                         {
                             nom:'Bouif',
                             prenom: 'Martin',
-                            adresse1: '26 rue de la Morandière',
+                            adresse1: 'blablabla',
                             adresse2: '',
                             cp: '50400',
                             ville: 'Trifouillis les Oies',
@@ -465,7 +536,6 @@
                     createur: 'Thomas',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=2',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -498,7 +568,6 @@
                     createur: 'Capucine',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=3',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -531,7 +600,6 @@
                     createur: 'Tristan',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=4',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -564,7 +632,6 @@
                     createur: 'Hugo',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=5',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -597,7 +664,6 @@
                     createur: 'Capucine',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=6',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -630,7 +696,6 @@
                     createur: 'Thomas',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=7',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -663,7 +728,6 @@
                     createur: 'Florian',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=8',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -696,7 +760,6 @@
                     createur: 'Anais',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=9',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -729,7 +792,6 @@
                     createur: 'Jade',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=10',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -762,7 +824,6 @@
                     createur: 'Anais',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=11',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -795,7 +856,6 @@
                     createur: 'Tristan',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=12',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -828,7 +888,6 @@
                     createur: 'Clementine',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=13',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -861,7 +920,6 @@
                     createur: 'Florian',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=14',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -894,7 +952,6 @@
                     createur: 'Jade',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=15',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -927,7 +984,6 @@
                     createur: 'Louis',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=16',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -960,7 +1016,6 @@
                     createur: 'Lea',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=17',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -993,7 +1048,6 @@
                     createur: 'Thomas',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=18',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -1026,7 +1080,6 @@
                     createur: 'Capucine',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=19',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -1059,7 +1112,6 @@
                     createur: 'Lea',
                     description: 'Changer le machin de ce client qui a son ordi qui rame.',
                     commentaires: 'Tout est rentré dans l\'ordre',
-                    href: 'details.html?id=20',
                     produit:[
                         {
                             ref:'Hizhai5896',
@@ -1104,7 +1156,6 @@
                         createur: this.createur,
                         description: this.description,
                         commentaires: this.commentaires,
-                        href: 'details.html?id="' + this.id + '"',
                         produit: [
                             {
                                 ref: this.ref,
@@ -1135,7 +1186,6 @@
                     this.createur = "";
                     this.description = "";
                     this.commentaires = "";
-                    this.href = "";
                     this.ref = "";
                     this.qte = "";
                     this.libelle = "";
@@ -1173,10 +1223,126 @@
                     alert('Merci de remplir les champs requis!')
                 }
             },
-            redirect(){
-                var urlStr = 'details.html' + '?id="' + this.interventions.id + '"';
-                console.log(urlStr);
-            }
+            eventDetails(id){
+                console.log(this.interventions[id - 1].client[0].adresse1)
+                console.log(this.interventions[id - 1].type)
+
+                //type intervention
+                var typeDetails = document.getElementById("typeDetails")
+                if (this.interventions[id - 1].type == "Maintenance"){
+                    typeDetails.selectedIndex = 0
+                }else if (this.interventions[id - 1].type == "Installation"){
+                    typeDetails.selectedIndex = 1
+                }else{
+                    typeDetails.selectedIndex = 2
+                }
+                typeDetails.disabled = true
+
+                //intervenant
+                var intervenantDetails = document.getElementById("intervenantDetails")
+                intervenantDetails.value = this.interventions[id - 1].intervenant
+                intervenantDetails.disabled = true
+
+                //etat
+                var etatDetails = document.getElementById("etatDetails")
+                etatDetails.value = this.interventions[id - 1].etat
+                etatDetails.disabled = true
+
+                //nom client
+                var nomClientDetails = document.getElementById("nomClientDetails")
+                nomClientDetails.value = this.interventions[id - 1].client[0].nom
+                nomClientDetails.disabled = true
+
+                //prenom client
+                var prenomClientDetails = document.getElementById("prenomClientDetails")
+                prenomClientDetails.value = this.interventions[id - 1].client[0].prenom
+                prenomClientDetails.disabled = true
+
+                //adresse1 client
+                var adresse1ClientDetails = document.getElementById("adresse1ClientDetails")
+                adresse1ClientDetails.value = this.interventions[id - 1].client[0].adresse1
+                adresse1ClientDetails.disabled = true
+
+                //adresse2 client
+                var adresse2ClientDetails = document.getElementById("adresse2ClientDetails")
+                adresse2ClientDetails.value = this.interventions[id - 1].client[0].adresse2
+                adresse2ClientDetails.disabled = true
+
+                //cp client
+                var cpClientDetails = document.getElementById("cpClientDetails")
+                cpClientDetails.value = this.interventions[id - 1].client[0].cp
+                cpClientDetails.disabled = true
+
+                //ville client
+                var villeClientDetails = document.getElementById("villeClientDetails")
+                villeClientDetails.value = this.interventions[id - 1].client[0].ville
+                villeClientDetails.disabled = true
+
+                //telephone client
+                var telephoneClientDetails = document.getElementById("telephoneClientDetails")
+                telephoneClientDetails.value = this.interventions[id - 1].client[0].telephone
+                telephoneClientDetails.disabled = true
+
+                //mail client
+                var mailClientDetails = document.getElementById("mailClientDetails")
+                mailClientDetails.value = this.interventions[id - 1].client[0].mail
+                mailClientDetails.disabled = true
+
+                //date début
+                var datepickerDetails = document.getElementById("datepickerDetails")
+                datepickerDetails.value = this.interventions[id - 1].date_debut
+                datepickerDetails.disabled = true
+
+                //date fin
+                var DateFinDetails = document.getElementById("dateFinDetails")
+                DateFinDetails.value = this.interventions[id - 1].date_fin
+                DateFinDetails.disabled = true
+
+                //heure début
+                var heureDebutDetails = document.getElementById("heureDebutDetails")
+                heureDebutDetails.value = this.interventions[id - 1].heure_debut
+                heureDebutDetails.disabled = true
+
+                //heure fin
+                var heureFinDetails = document.getElementById("heureFinDetails")
+                heureFinDetails.value = this.interventions[id - 1].heure_fin
+                heureFinDetails.disabled = true
+
+                //createur
+                var createurDetails = document.getElementById("createurDetails")
+                createurDetails.value = this.interventions[id - 1].createur
+                createurDetails.disabled = true
+
+                //ref produits
+                var refDetails = document.getElementById("refDetails")
+                refDetails.value = this.interventions[id - 1].produit[0].ref
+                refDetails.disabled = true
+
+                //qte produits
+                var qteProduitDetails = document.getElementById("qteProduitDetails")
+                qteProduitDetails.value = this.interventions[id - 1].produit[0].qte
+                qteProduitDetails.disabled = true
+
+                //libelle produits
+                var libelleProduitDetails = document.getElementById("libelleProduitDetails")
+                libelleProduitDetails.value = this.interventions[id - 1].produit[0].libelle
+                libelleProduitDetails.disabled = true
+
+                //description
+                var descriptionDetails = document.getElementById("descriptionDetails")
+                descriptionDetails.value = this.interventions[id - 1].description
+                descriptionDetails.disabled = true
+
+                //commentaires
+                var commentairesDetails = document.getElementById("commentairesDetails")
+                commentairesDetails.value = this.interventions[id - 1].commentaires
+                commentairesDetails.disabled = true
+            },
+
+            catchModifDetails(){
+                var intervenantDetails = document.getElementById("intervenantDetails")
+                console.log(this.intervenant)
+            },
         }
     });
 
@@ -1192,6 +1358,57 @@
         var removeForm = document.getElementById("removeFormContainer");
         removeForm.classList.remove("displayNone");
     })
+
+    var modifierDetailsBtn = document.getElementById("modifierDetailsBtn");
+    modifierDetailsBtn.addEventListener('click', function() {
+        var typeDetails = document.getElementById('typeDetails');
+        var etatDetails = document.getElementById('etatDetails');
+        var intervenantDetails = document.getElementById('intervenantDetails');
+        var nomClientDetails = document.getElementById('nomClientDetails');
+        var prenomClientDetails = document.getElementById('prenomClientDetails');
+        var adresse1ClientDetails = document.getElementById('adresse1ClientDetails');
+        var adresse2ClientDetails = document.getElementById('adresse2ClientDetails');
+        var cpClientDetails = document.getElementById('cpClientDetails');
+        var villeClientDetails = document.getElementById('villeClientDetails');
+        var telephoneClientDetails = document.getElementById('telephoneClientDetails');
+        var mailClientDetails = document.getElementById('mailClientDetails');
+        var datepickerDetails = document.getElementById('datepickerDetails');
+        var dateFinDetails = document.getElementById('dateFinDetails');
+        var heureDebutDetails = document.getElementById('heureDebutDetails');
+        var heureFinDetails = document.getElementById('heureFinDetails');
+        var createurDetails = document.getElementById('createurDetails');
+        var refDetails = document.getElementById('refDetails');
+        var qteProduitDetails = document.getElementById('qteProduitDetails');
+        var libelleProduitDetails = document.getElementById('libelleProduitDetails');
+        var descriptionDetails = document.getElementById('descriptionDetails');
+        var commentairesDetails = document.getElementById('commentairesDetails');
+        var enregDetailsBtn = document.getElementById('enregDetailsBtn')
+
+        console.log(dateFinDetails)
+        typeDetails.disabled = false;
+        intervenantDetails.disabled = false;
+        etatDetails.disabled = false;
+        nomClientDetails.disabled = false;
+        prenomClientDetails.disabled = false;
+        adresse1ClientDetails.disabled = false;
+        adresse2ClientDetails.disabled = false;
+        cpClientDetails.disabled = false;
+        villeClientDetails.disabled = false;
+        telephoneClientDetails.disabled = false;
+        mailClientDetails.disabled = false;
+        datepickerDetails.disabled = false;
+        dateFinDetails.disabled = false;
+        heureDebutDetails.disabled = false;
+        heureFinDetails.disabled = false;
+        createurDetails.disabled = false;
+        refDetails.disabled = false;
+        qteProduitDetails.disabled = false;
+        libelleProduitDetails.disabled = false;
+        descriptionDetails.disabled = false;
+        commentairesDetails.disabled = false;
+        enregDetailsBtn.classList.remove('displayNone');
+    })
+
 
 </script>
 </body>
