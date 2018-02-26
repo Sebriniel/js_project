@@ -93,7 +93,7 @@
                         <option>Désinstallation
                     </select>
                     <input type="text" id="intervenantDetails" v-model="intervenant"/>
-                    <input type="text" id="etatDetails" readonly/>
+                    <input type="text" id="etatDetails" v-model="etat"/>
                 </div>
 
                 <h4>Client</h4>
@@ -472,6 +472,7 @@
         data: {
             type: '',
             intervenant: '',
+            etat:'',
             date_debut: '',
             heure_debut: '',
             date_fin: '',
@@ -1228,115 +1229,159 @@
                 console.log(this.interventions[id - 1].type)
 
                 //type intervention
-                var typeDetails = document.getElementById("typeDetails")
+                //var typeDetails = document.getElementById("typeDetails")
                 if (this.interventions[id - 1].type == "Maintenance"){
-                    typeDetails.selectedIndex = 0
+                    this.type.selectedIndex = 0
                 }else if (this.interventions[id - 1].type == "Installation"){
-                    typeDetails.selectedIndex = 1
+                    this.type.selectedIndex = 1
                 }else{
-                    typeDetails.selectedIndex = 2
+                    this.type.selectedIndex = 2
                 }
-                typeDetails.disabled = true
+                this.type.disabled = true
 
-                //intervenant
-                var intervenantDetails = document.getElementById("intervenantDetails")
-                intervenantDetails.value = this.interventions[id - 1].intervenant
-                intervenantDetails.disabled = true
+
+                let inputs = [
+                    "id",
+                    "type",
+                    "intervenant",
+                    "etat",
+                    "date_debut",
+                    "heure_debut",
+                    "date_fin",
+                    "heure_fin",
+                    "createur",
+                    "description",
+                    "commentaires",
+                    produit = [
+                        "ref",
+                        "qte",
+                        "libelle"
+                    ],
+                    client = [
+                        "nom",
+                        "prenom",
+                        "adresse1",
+                        "adresse2",
+                        "cp",
+                        "ville",
+                        "telephone",
+                        "mail"
+                    ]
+                ]
+
+
+                for (let i=0; i<this.interventions.length; i++){
+                    for (let j=0; j<inputs.length; j++){
+                        console.log(inputs[j])
+                        if(inputs[j] === "produit"){
+//                            this.inputs[j] = this.interventions[id - 1].produit[0].inputs[j]
+                        }else if(inputs[j] === "client"){
+//                            this.inputs[j] = this.interventions[id - 1].client[0].inputs[j]
+                        }else {
+                            let variable = inputs[j]
+                            //console.log(this.interventions[id - 1][inputs[j]])
+                            this.variable = this.interventions[id - 1][inputs[j]]
+                        }
+                    }
+                    //this.otherInputs[i] = this.interventions[id - 1].otherInputs[i]
+                }
+//                this.intervenant = this.interventions[id - 1].intervenant
+//                this.intervenant.disabled = true
 
                 //etat
-                var etatDetails = document.getElementById("etatDetails")
-                etatDetails.value = this.interventions[id - 1].etat
-                etatDetails.disabled = true
-
-                //nom client
-                var nomClientDetails = document.getElementById("nomClientDetails")
-                nomClientDetails.value = this.interventions[id - 1].client[0].nom
-                nomClientDetails.disabled = true
-
-                //prenom client
-                var prenomClientDetails = document.getElementById("prenomClientDetails")
-                prenomClientDetails.value = this.interventions[id - 1].client[0].prenom
-                prenomClientDetails.disabled = true
-
-                //adresse1 client
-                var adresse1ClientDetails = document.getElementById("adresse1ClientDetails")
-                adresse1ClientDetails.value = this.interventions[id - 1].client[0].adresse1
-                adresse1ClientDetails.disabled = true
-
-                //adresse2 client
-                var adresse2ClientDetails = document.getElementById("adresse2ClientDetails")
-                adresse2ClientDetails.value = this.interventions[id - 1].client[0].adresse2
-                adresse2ClientDetails.disabled = true
-
-                //cp client
-                var cpClientDetails = document.getElementById("cpClientDetails")
-                cpClientDetails.value = this.interventions[id - 1].client[0].cp
-                cpClientDetails.disabled = true
-
-                //ville client
-                var villeClientDetails = document.getElementById("villeClientDetails")
-                villeClientDetails.value = this.interventions[id - 1].client[0].ville
-                villeClientDetails.disabled = true
-
-                //telephone client
-                var telephoneClientDetails = document.getElementById("telephoneClientDetails")
-                telephoneClientDetails.value = this.interventions[id - 1].client[0].telephone
-                telephoneClientDetails.disabled = true
-
-                //mail client
-                var mailClientDetails = document.getElementById("mailClientDetails")
-                mailClientDetails.value = this.interventions[id - 1].client[0].mail
-                mailClientDetails.disabled = true
-
-                //date début
-                var datepickerDetails = document.getElementById("datepickerDetails")
-                datepickerDetails.value = this.interventions[id - 1].date_debut
-                datepickerDetails.disabled = true
-
-                //date fin
-                var DateFinDetails = document.getElementById("dateFinDetails")
-                DateFinDetails.value = this.interventions[id - 1].date_fin
-                DateFinDetails.disabled = true
-
-                //heure début
-                var heureDebutDetails = document.getElementById("heureDebutDetails")
-                heureDebutDetails.value = this.interventions[id - 1].heure_debut
-                heureDebutDetails.disabled = true
-
-                //heure fin
-                var heureFinDetails = document.getElementById("heureFinDetails")
-                heureFinDetails.value = this.interventions[id - 1].heure_fin
-                heureFinDetails.disabled = true
-
-                //createur
-                var createurDetails = document.getElementById("createurDetails")
-                createurDetails.value = this.interventions[id - 1].createur
-                createurDetails.disabled = true
-
-                //ref produits
-                var refDetails = document.getElementById("refDetails")
-                refDetails.value = this.interventions[id - 1].produit[0].ref
-                refDetails.disabled = true
-
-                //qte produits
-                var qteProduitDetails = document.getElementById("qteProduitDetails")
-                qteProduitDetails.value = this.interventions[id - 1].produit[0].qte
-                qteProduitDetails.disabled = true
-
-                //libelle produits
-                var libelleProduitDetails = document.getElementById("libelleProduitDetails")
-                libelleProduitDetails.value = this.interventions[id - 1].produit[0].libelle
-                libelleProduitDetails.disabled = true
-
-                //description
-                var descriptionDetails = document.getElementById("descriptionDetails")
-                descriptionDetails.value = this.interventions[id - 1].description
-                descriptionDetails.disabled = true
-
-                //commentaires
-                var commentairesDetails = document.getElementById("commentairesDetails")
-                commentairesDetails.value = this.interventions[id - 1].commentaires
-                commentairesDetails.disabled = true
+//                var etatDetails = document.getElementById("etatDetails")
+//                etatDetails.value = this.interventions[id - 1].etat
+//                etatDetails.disabled = true
+//
+//                //nom client
+//                var nomClientDetails = document.getElementById("nomClientDetails")
+//                nomClientDetails.value = this.interventions[id - 1].client[0].nom
+//                nomClientDetails.disabled = true
+//
+//                //prenom client
+//                var prenomClientDetails = document.getElementById("prenomClientDetails")
+//                prenomClientDetails.value = this.interventions[id - 1].client[0].prenom
+//                prenomClientDetails.disabled = true
+//
+//                //adresse1 client
+//                var adresse1ClientDetails = document.getElementById("adresse1ClientDetails")
+//                adresse1ClientDetails.value = this.interventions[id - 1].client[0].adresse1
+//                adresse1ClientDetails.disabled = true
+//
+//                //adresse2 client
+//                var adresse2ClientDetails = document.getElementById("adresse2ClientDetails")
+//                adresse2ClientDetails.value = this.interventions[id - 1].client[0].adresse2
+//                adresse2ClientDetails.disabled = true
+//
+//                //cp client
+//                var cpClientDetails = document.getElementById("cpClientDetails")
+//                cpClientDetails.value = this.interventions[id - 1].client[0].cp
+//                cpClientDetails.disabled = true
+//
+//                //ville client
+//                var villeClientDetails = document.getElementById("villeClientDetails")
+//                villeClientDetails.value = this.interventions[id - 1].client[0].ville
+//                villeClientDetails.disabled = true
+//
+//                //telephone client
+//                var telephoneClientDetails = document.getElementById("telephoneClientDetails")
+//                telephoneClientDetails.value = this.interventions[id - 1].client[0].telephone
+//                telephoneClientDetails.disabled = true
+//
+//                //mail client
+//                var mailClientDetails = document.getElementById("mailClientDetails")
+//                mailClientDetails.value = this.interventions[id - 1].client[0].mail
+//                mailClientDetails.disabled = true
+//
+//                //date début
+//                var datepickerDetails = document.getElementById("datepickerDetails")
+//                datepickerDetails.value = this.interventions[id - 1].date_debut
+//                datepickerDetails.disabled = true
+//
+//                //date fin
+//                var DateFinDetails = document.getElementById("dateFinDetails")
+//                DateFinDetails.value = this.interventions[id - 1].date_fin
+//                DateFinDetails.disabled = true
+//
+//                //heure début
+//                var heureDebutDetails = document.getElementById("heureDebutDetails")
+//                heureDebutDetails.value = this.interventions[id - 1].heure_debut
+//                heureDebutDetails.disabled = true
+//
+//                //heure fin
+//                var heureFinDetails = document.getElementById("heureFinDetails")
+//                heureFinDetails.value = this.interventions[id - 1].heure_fin
+//                heureFinDetails.disabled = true
+//
+//                //createur
+//                var createurDetails = document.getElementById("createurDetails")
+//                createurDetails.value = this.interventions[id - 1].createur
+//                createurDetails.disabled = true
+//
+//                //ref produits
+//                var refDetails = document.getElementById("refDetails")
+//                refDetails.value = this.interventions[id - 1].produit[0].ref
+//                refDetails.disabled = true
+//
+//                //qte produits
+//                var qteProduitDetails = document.getElementById("qteProduitDetails")
+//                qteProduitDetails.value = this.interventions[id - 1].produit[0].qte
+//                qteProduitDetails.disabled = true
+//
+//                //libelle produits
+//                var libelleProduitDetails = document.getElementById("libelleProduitDetails")
+//                libelleProduitDetails.value = this.interventions[id - 1].produit[0].libelle
+//                libelleProduitDetails.disabled = true
+//
+//                //description
+//                var descriptionDetails = document.getElementById("descriptionDetails")
+//                descriptionDetails.value = this.interventions[id - 1].description
+//                descriptionDetails.disabled = true
+//
+//                //commentaires
+//                var commentairesDetails = document.getElementById("commentairesDetails")
+//                commentairesDetails.value = this.interventions[id - 1].commentaires
+//                commentairesDetails.disabled = true
             },
 
             catchModifDetails(){
