@@ -391,13 +391,13 @@
                         <option>Installation</option>
                         <option>Désinstallation</option>
                     </select>
-                    <input type="text" id="intervenantDetails" v-model="intervenant"/>
+                    <input type="text" id="intervenantDetails" @click="editIntervenant()" v-model="intervenant"/>
                     <input type="text" id="etatDetails" v-model="etat"/>
                 </div>
 
                 <h4>Client</h4>
                 <div id="coordClientDetails">
-                    <input type="text" id="nomClientDetails" v-model="client.nom" />
+                    <input type="text" id="nomClientDetails"  v-model="client.nom" />
                     <input type="text" id="prenomClientDetails" v-model="client.prenom" />
                     <input type="text" id="adresse1ClientDetails" v-model="client.adresse1" />
                     <input type="text" id="adresse2ClientDetails" v-model="client.adresse2"/>
@@ -432,8 +432,7 @@
                     <textarea name="commentaires" id="commentairesDetails" cols="30" rows="10" v-model="commentaires"></textarea>
                 </div>
 
-                <input type="button" class="btn btn-secondary" id="modifierDetailsBtn" value="Modifier" />
-                <input type="submit" class="btn btn-secondary displayNone" id="enregDetailsBtn" value="Enregistrer"/>
+                <input type="submit" class="btn btn-secondary" id="enregDetailsBtn" value="Enregistrer"/>
             </form>
         </div>
         `,
@@ -443,6 +442,7 @@
                     getId = id - 1
 
                 this.displayForm = true
+                this.type = this.interventions[getId].type
 
                 this.etat = this.interventions[getId].etat
                 this.createur = this.interventions[getId].createur
@@ -471,6 +471,21 @@
             editCreateur(){
                 return this.createur
             },
+            editIntervenant(){
+                return this.intervenant
+            },
+            editType(){
+                return this.type
+            },
+            editEtat(){
+                return this.etat
+            },
+            editDescription(){
+                return this.description
+            },
+            editCommentaires(){
+                return this.commentaires
+            },
             catchModifDetails(){
 
                 let id = store.getters.getterIdInterv,
@@ -478,7 +493,12 @@
 
                 this.displayForm = false
 
-                return this.interventions[getId].createur =  this.createur
+                return this.interventions[getId].createur =  this.createur,
+                    this.interventions[getId].intervenant = this.intervenant,
+                    this.interventions[getId].type = this.type,
+                    this.interventions[getId].etat = this.etat,
+                    this.interventions[getId].description = this.description,
+                    this.interventions[getId].commentaires = this.commentaires
             }
         }
     })
@@ -1273,7 +1293,6 @@
         var libelleProduitDetails = document.getElementById('libelleProduitDetails');
         var descriptionDetails = document.getElementById('descriptionDetails');
         var commentairesDetails = document.getElementById('commentairesDetails');
-        var enregDetailsBtn = document.getElementById('enregDetailsBtn')
 
         //console.log(dateFinDetails)
         typeDetails.disabled = false;
@@ -1297,7 +1316,6 @@
         libelleProduitDetails.disabled = false;
         descriptionDetails.disabled = false;
         commentairesDetails.disabled = false;
-        enregDetailsBtn.classList.remove('displayNone');
     })
 
 
