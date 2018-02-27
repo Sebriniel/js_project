@@ -18,70 +18,7 @@
     <nbrintervention class="textColor"></nbrintervention>
     <interventionlist :interventions="interventions"></interventionlist>
     <pagination></pagination>
-    <div id="addForm">
-        <button id="addInterv" class="btn btn-secondary">Ajouter une intervention</button>
-        <div id="formContainer" class="displayNone" >
-            <form action="" method="post" @submit.prevent="catchSubmit()" id="myForm">
-                <h4>Informations principales</h4>
-                <div id="intervInfo">
-                    <select name="type" id="type" v-model="type">
-                        <option>Maintenance
-                        <option>Installation
-                        <option>Désinstallation
-                    </select>
-                    <input type="text" placeholder="Intervenant" v-model="intervenant"/>
-                    <input type="text" value="A faire" readonly/>
-                </div>
-
-                <h4>Client</h4>
-                <div id="coordClient">
-                    <input type="text" placeholder="Nom client" v-model="nom"  />
-                    <input type="text" placeholder="Prénom client" v-model="prenom"  />
-                    <input type="text" placeholder="Adresse 1" v-model="adresse1"  />
-                    <input type="text" placeholder="Adresse 2" v-model="adresse2"/>
-                    <input type="text" placeholder="Code postal" v-model="cp"  />
-                    <input type="text" placeholder="Ville" v-model="ville"  />
-                    <input type="text" placeholder="Telephone" v-model="telephone"  />
-                    <input type="text" placeholder="Mail" v-model="mail"/>
-                </div>
-
-                <h4>Dates et heures</h4>
-                <div id="dates">
-                    <input type="text" placeholder="Date de début" v-model="date_debut"   id="datepicker"/>
-                    <input type="text" placeholder="Heure de début" v-model="heure_debut"/>
-                    <input type="text" placeholder="Date de fin" v-model="date_fin"  />
-                    <input type="text" placeholder="Heure de fin" v-model="heure_fin"/>
-                </div>
-
-                <div>
-                    <input type="text" placeholder="Créateur" v-model="createur"  />
-                </div>
-
-                <h4>Produit</h4>
-                <div id="refProduit">
-                    <input type="text" placeholder="Référence produit" v-model="ref"/>
-                    <input type="text" placeholder="Quantité produit" v-model="qte"/>
-                    <input type="text" placeholder="Libellé produit" v-model="libelle"/>
-                </div>
-
-                <h4>Descriptions et commentaires</h4>
-                <div id="textareas">
-                    <textarea name="description" cols="30" rows="10" placeholder="Description de l'intervention" v-model="description"></textarea>
-                    <textarea name="commentaires" cols="30" rows="10" placeholder="Commentaires de l'intervenant" v-model="commentaires"></textarea>
-                </div>
-
-                <input type="submit" class="btn btn-secondary" id="submit"/>
-            </form>
-        </div>
-        <button id="removeInterv" class="btn btn-secondary">Supprimer une intervention</button>
-        <div id="removeFormContainer" class=" displayNone">
-            <form action="" method="post"  @submit.prevent="catchRemove()" id="removeForm">
-                <input type="text" placeholder="Numéro de l'intervention" v-model="idInterv"  >
-                <input type="submit" class="btn btn-secondary" id="btnRemove">
-            </form>
-        </div>
-    </div>
-    <editinterv :interventions="interventions"></editinterv>
+    <editinterv ref="editInterv" :interventions="interventions"></editinterv>
 </div>
 
 
@@ -400,8 +337,13 @@
             <td>{{date_debut}}</td>
             <td>{{date_fin}}</td>
             <td>{{createur}}</td>
-            <td><a href="#formContainerDetails"><button @click="$children.eventDetails(id)">Voir</button></a></td>
         </tr>`,
+        methods:{
+            eventDetails(id){
+                store.commit('editIdInterv', id)
+                vm.$refs.editInterv.initForm()
+            }
+        }
     })
 
     Vue.component('editinterv', {
@@ -409,6 +351,12 @@
             'interventions',
             'id'
         ],
+        data() {
+            return {
+                etat: '',
+                createur: ''
+            }
+        },
         template: `
         <form action="" method="post" id="myFormDetails" @submit.prevent="catchModifDetails">
                 <h4>Informations principales</h4>
@@ -419,7 +367,7 @@
                         <option>Désinstallation</option>
                     </select>
                     <input type="text" id="intervenantDetails" v-bind:value="interventions.intervenant"/>
-                    <input type="text" id="etatDetails" v-bind:value="interventions.etat"/>
+                    <input type="text" id="etatDetails" v-model="etat"/>
                 </div>
 
                 <h4>Client</h4>
@@ -443,7 +391,7 @@
                 </div>
 
                 <div>
-                    <input type="text" id="createurDetails" v-bind:value="interventions.createur" />
+                    <input type="text" id="createurDetails" @click="editCreateur()" v-model="createur" />{{id}}
                 </div>
 
                 <h4>Produit</h4>
@@ -465,11 +413,26 @@
         </div>
         `,
         methods: {
-            eventDetails(id){
-                vm.eventDetails(id)
-                console.log(id)
-            }
+            initForm(){
+                let id = store.getters.getterIdInterv,
+                    getId = id - 1
 
+                this.etat = this.interventions[getId].etat
+
+                this.createur = this.interventions[getId].createur
+
+
+            },
+            editCreateur(){
+                return this.createur
+            },
+            catchModifDetails(){
+
+                let id = store.getters.getterIdInterv,
+                    getId = id - 1
+
+                return this.interventions[getId].createur =  this.createur
+            }
         }
     })
 
@@ -1230,76 +1193,6 @@
                     alert('Merci de remplir les champs requis!')
                 }
             },
-            eventDetails(id){
-                //console.log(this.interventions[id - 1].client[0].adresse1)
-                //console.log(this.interventions[id - 1].type)
-
-                //type intervention
-                //var typeDetails = document.getElementById("typeDetails")
-                if (this.interventions[id - 1].type == "Maintenance"){
-                    this.type.selectedIndex = 0
-                }else if (this.interventions[id - 1].type == "Installation"){
-                    this.type.selectedIndex = 1
-                }else{
-                    this.type.selectedIndex = 2
-                }
-                this.type.disabled = true
-
-
-                let inputs = [
-                    "id",
-                    "type",
-                    "intervenant",
-                    "etat",
-                    "date_debut",
-                    "heure_debut",
-                    "date_fin",
-                    "heure_fin",
-                    "createur",
-                    "description",
-                    "commentaires",
-                    produit = [
-                        "ref",
-                        "qte",
-                        "libelle"
-                    ],
-                    client = [
-                        "nom",
-                        "prenom",
-                        "adresse1",
-                        "adresse2",
-                        "cp",
-                        "ville",
-                        "telephone",
-                        "mail"
-                    ]
-                ]
-
-
-                for (let i=0; i<this.interventions.length; i++){
-                    for (let j=0; j<inputs.length; j++){
-                        if(Array.isArray(inputs[j]) ){
-                            for (let k=0; k<inputs[j].length; k++){
-                                //console.log(inputs[j][k]);
-                            }
-//                            console.log(this[produit][inputs[j]])
-//                            console.log(this.interventions[id - 1].produit[inputs[j]])
-//                            console.log("-----------------------")
-//                            this[produit][inputs[j]] = this.interventions[id - 1].produit[inputs[j]]
-//                            this.inputs[j] = this.interventions[id - 1].produit[0].inputs[j]
-                        }else if(inputs[j] === "client"){
-//                            this.inputs[j] = this.interventions[id - 1].client[0].inputs[j]
-                            this[client][inputs[j]] = this.interventions[id - 1].client[inputs[j]]
-                        }else {
-                            //console.log(this.interventions[id - 1][inputs[j]])
-                            this[inputs[j]] = this.interventions[id - 1][inputs[j]]
-                        }
-                    }
-                    //this.otherInputs[i] = this.interventions[id - 1].otherInputs[i]
-                }
-//
-            },
-
             catchModifDetails(){
                 var intervenantDetails = document.getElementById("intervenantDetails")
                 //console.log(this.intervenant)
@@ -1308,17 +1201,7 @@
     });
 
 
-    var addBtn = document.getElementById("addInterv");
-    addBtn.addEventListener('click', function(){
-        var formContainer = document.getElementById("formContainer");
-        formContainer.classList.remove("displayNone");
-    })
 
-    var removeBtn = document.getElementById("removeInterv");
-    removeBtn.addEventListener('click', function(){
-        var removeForm = document.getElementById("removeFormContainer");
-        removeForm.classList.remove("displayNone");
-    })
 
     var modifierDetailsBtn = document.getElementById("modifierDetailsBtn");
     modifierDetailsBtn.addEventListener('click', function() {
