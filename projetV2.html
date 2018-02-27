@@ -386,50 +386,29 @@
         <form action="" method="post" :class="[displayForm ? 'editForm' : 'displayNone']" @submit.prevent="catchModifDetails">
                 <h4>Informations principales</h4>
                 <div id="intervInfoDetails">
-                    <select name="type" id="typeDetails" v-model="type">
                         <option>Maintenance</option>
                         <option>Installation</option>
                         <option>Désinstallation</option>
                     </select>
-                    <input type="text" id="intervenantDetails" @click="editIntervenant()" v-model="intervenant"/>
-                    <input type="text" id="etatDetails" v-model="etat"/>
                 </div>
 
                 <h4>Client</h4>
                 <div id="coordClientDetails">
-                    <input type="text" id="nomClientDetails"  v-model="client.nom" />
-                    <input type="text" id="prenomClientDetails" v-model="client.prenom" />
-                    <input type="text" id="adresse1ClientDetails" v-model="client.adresse1" />
-                    <input type="text" id="adresse2ClientDetails" v-model="client.adresse2"/>
-                    <input type="text" id="cpClientDetails" v-model="client.cp" />
-                    <input type="text" id="villeClientDetails" v-model="client.ville" />
-                    <input type="text" id="telephoneClientDetails" v-model="client.telephone" />
-                    <input type="text" id="mailClientDetails" v-model="client.mail"/>
                 </div>
 
                 <h4>Dates et heures</h4>
                 <div id="datesDetails">
-                    <input type="text"  id="datepickerDetails" v-model="date_debut"/>
-                    <input type="text" id="heureDebutDetails" v-model="heure_debut"/>
-                    <input type="text" id="dateFinDetails" v-model="date_fin" />
-                    <input type="text" id="heureFinDetails" v-model="heure_fin"/>
                 </div>
 
                 <div>
-                    <input type="text" id="createurDetails" @click="editCreateur()" v-model="createur" />{{id}}
                 </div>
 
                 <h4>Produit</h4>
                 <div id="refProduitDetails">
-                    <input type="text" id="refDetails" v-model="produit.ref"/>
-                    <input type="text" id="qteProduitDetails" v-model="produit.qte"/>
-                    <input type="text" id="libelleProduitDetails" v-model="produit.libelle"/>
                 </div>
 
                 <h4>Descriptions et commentaires</h4>
                 <div id="textareasDetails">
-                    <textarea name="description" id="descriptionDetails" cols="30" rows="10" v-model="description"></textarea>
-                    <textarea name="commentaires" id="commentairesDetails" cols="30" rows="10" v-model="commentaires"></textarea>
                 </div>
 
                 <input type="submit" class="btn btn-secondary" id="enregDetailsBtn" value="Enregistrer"/>
@@ -468,23 +447,6 @@
                 this.produit.qte = this.interventions[getId].produit[0].qte
                 this.produit.libelle = this.interventions[getId].produit[0].libelle
             },
-            editCreateur(){
-                return this.createur
-            },
-            editIntervenant(){
-                return this.intervenant
-            },
-            editType(){
-                return this.type
-            },
-            editEtat(){
-                return this.etat
-            },
-            editDescription(){
-                return this.description
-            },
-            editCommentaires(){
-                return this.commentaires
             },
             catchModifDetails(){
 
@@ -1261,62 +1223,12 @@
                 }
             },
             catchModifDetails(){
-                var intervenantDetails = document.getElementById("intervenantDetails")
                 //console.log(this.intervenant)
             },
         }
-    });
 
 
 
-
-    var modifierDetailsBtn = document.getElementById("modifierDetailsBtn");
-    modifierDetailsBtn.addEventListener('click', function() {
-        var typeDetails = document.getElementById('typeDetails');
-        var etatDetails = document.getElementById('etatDetails');
-        var intervenantDetails = document.getElementById('intervenantDetails');
-        var nomClientDetails = document.getElementById('nomClientDetails');
-        var prenomClientDetails = document.getElementById('prenomClientDetails');
-        var adresse1ClientDetails = document.getElementById('adresse1ClientDetails');
-        var adresse2ClientDetails = document.getElementById('adresse2ClientDetails');
-        var cpClientDetails = document.getElementById('cpClientDetails');
-        var villeClientDetails = document.getElementById('villeClientDetails');
-        var telephoneClientDetails = document.getElementById('telephoneClientDetails');
-        var mailClientDetails = document.getElementById('mailClientDetails');
-        var datepickerDetails = document.getElementById('datepickerDetails');
-        var dateFinDetails = document.getElementById('dateFinDetails');
-        var heureDebutDetails = document.getElementById('heureDebutDetails');
-        var heureFinDetails = document.getElementById('heureFinDetails');
-        var createurDetails = document.getElementById('createurDetails');
-        var refDetails = document.getElementById('refDetails');
-        var qteProduitDetails = document.getElementById('qteProduitDetails');
-        var libelleProduitDetails = document.getElementById('libelleProduitDetails');
-        var descriptionDetails = document.getElementById('descriptionDetails');
-        var commentairesDetails = document.getElementById('commentairesDetails');
-
-        //console.log(dateFinDetails)
-        typeDetails.disabled = false;
-        intervenantDetails.disabled = false;
-        etatDetails.disabled = false;
-        nomClientDetails.disabled = false;
-        prenomClientDetails.disabled = false;
-        adresse1ClientDetails.disabled = false;
-        adresse2ClientDetails.disabled = false;
-        cpClientDetails.disabled = false;
-        villeClientDetails.disabled = false;
-        telephoneClientDetails.disabled = false;
-        mailClientDetails.disabled = false;
-        datepickerDetails.disabled = false;
-        dateFinDetails.disabled = false;
-        heureDebutDetails.disabled = false;
-        heureFinDetails.disabled = false;
-        createurDetails.disabled = false;
-        refDetails.disabled = false;
-        qteProduitDetails.disabled = false;
-        libelleProduitDetails.disabled = false;
-        descriptionDetails.disabled = false;
-        commentairesDetails.disabled = false;
-    })
 
 
 </script>
