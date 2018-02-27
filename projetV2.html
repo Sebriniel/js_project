@@ -378,9 +378,12 @@
                     libelle: '',
                 },
                 description: '',
+                commentaires: '',
+                displayForm: false
             }
         },
         template: `
+        <form action="" method="post" :class="[displayForm ? 'editForm' : 'displayNone']" @submit.prevent="catchModifDetails">
                 <h4>Informations principales</h4>
                 <div id="intervInfoDetails">
                     <select name="type" id="typeDetails" v-model="type">
@@ -439,13 +442,31 @@
                 let id = store.getters.getterIdInterv,
                     getId = id - 1
 
+                this.displayForm = true
+
                 this.etat = this.interventions[getId].etat
                 this.createur = this.interventions[getId].createur
                 this.intervenant = this.interventions[getId].intervenant
+                this.description = this.interventions[getId].description
+                this.commentaires = this.interventions[getId].commentaires
+
+                this.client.nom = this.interventions[getId].client[0].nom
+                this.client.prenom = this.interventions[getId].client[0].prenom
+                this.client.adresse1 = this.interventions[getId].client[0].adresse1
+                this.client.adresse2 = this.interventions[getId].client[0].adresse2
+                this.client.cp = this.interventions[getId].client[0].cp
+                this.client.ville = this.interventions[getId].client[0].ville
+                this.client.telephone = this.interventions[getId].client[0].telephone
+                this.client.mail = this.interventions[getId].client[0].mail
+
                 this.date_debut = this.interventions[getId].date_debut
                 this.heure_debut = this.interventions[getId].heure_debut
                 this.date_fin = this.interventions[getId].date_fin
                 this.heure_fin = this.interventions[getId].heure_fin
+
+                this.produit.ref = this.interventions[getId].produit[0].ref
+                this.produit.qte = this.interventions[getId].produit[0].qte
+                this.produit.libelle = this.interventions[getId].produit[0].libelle
             },
             editCreateur(){
                 return this.createur
@@ -454,6 +475,8 @@
 
                 let id = store.getters.getterIdInterv,
                     getId = id - 1
+
+                this.displayForm = false
 
                 return this.interventions[getId].createur =  this.createur
             }
