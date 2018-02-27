@@ -337,6 +337,7 @@
             <td>{{date_debut}}</td>
             <td>{{date_fin}}</td>
             <td>{{createur}}</td>
+            <td><button @click="eventDetails(id)">Voir</button></td>
         </tr>`,
         methods:{
             eventDetails(id){
@@ -354,40 +355,63 @@
         data() {
             return {
                 etat: '',
-                createur: ''
+                createur: '',
+                type: '',
+                intervenant: '',
+                client: {
+                    nom: '',
+                    prenom: '',
+                    adresse1: '',
+                    adresse2: '',
+                    cp: '',
+                    ville: '',
+                    telephone: '',
+                    mail: '',
+                },
+                date_debut: '',
+                heure_debut: '',
+                date_fin: '',
+                heure_fin: '',
+                produit: {
+                    ref: '',
+                    qte: '',
+                    libelle: '',
+                },
+                description: '',
+                commentaires: ''
             }
         },
         template: `
         <form action="" method="post" id="myFormDetails" @submit.prevent="catchModifDetails">
                 <h4>Informations principales</h4>
                 <div id="intervInfoDetails">
-                    <select name="type" id="typeDetails" v-bind:value="interventions.type">
+                    <select name="type" id="typeDetails" v-model="type">
                         <option>Maintenance</option>
                         <option>Installation</option>
                         <option>Désinstallation</option>
                     </select>
-                    <input type="text" id="intervenantDetails" v-bind:value="interventions.intervenant"/>
+                    <input type="text" id="intervenantDetails" v-model="intervenant"/>
                     <input type="text" id="etatDetails" v-model="etat"/>
                 </div>
 
                 <h4>Client</h4>
                 <div id="coordClientDetails">
-                    <input type="text" id="nomClientDetails" v-bind:value="interventions.nom" />
-                    <input type="text" id="prenomClientDetails" v-bind:value="interventions.prenom" />
-                    <input type="text" id="adresse1ClientDetails" v-bind:value="interventions.adresse1" />
-                    <input type="text" id="adresse2ClientDetails" v-bind:value="interventions.adresse2"/>
-                    <input type="text" id="cpClientDetails" v-bind:value="interventions.cp" />
-                    <input type="text" id="villeClientDetails" v-bind:value="interventions.ville" />
-                    <input type="text" id="telephoneClientDetails" v-bind:value="interventions.telephone" />
-                    <input type="text" id="mailClientDetails" v-bind:value="interventions.mail"/>
+                    <input type="text" id="nomClientDetails" v-model="client.nom" />
+                    <input type="text" id="prenomClientDetails" v-model="client.prenom" />
+                    <input type="text" id="adresse1ClientDetails" v-model="client.adresse1" />
+                    <input type="text" id="adresse2ClientDetails" v-model="client.adresse2"/>
+                    <input type="text" id="cpClientDetails" v-model="client.cp" />
+                    <input type="text" id="villeClientDetails" v-model="client.ville" />
+                    <input type="text" id="telephoneClientDetails" v-model="client.telephone" />
+                    <input type="text" id="mailClientDetails" v-model="client.mail"/>
                 </div>
 
                 <h4>Dates et heures</h4>
                 <div id="datesDetails">
-                    <input type="text"  id="datepickerDetails" v-bind:value="interventions.date_debut"/>
-                    <input type="text" id="heureDebutDetails" v-bind:value="interventions.heure_debut"/>
-                    <input type="text" id="dateFinDetails" v-bind:value="interventions.date_fin" />
-                    <input type="text" id="heureFinDetails" v-bind:value="interventions.heure_fin"/>
+                    <input type="text"  id="datepickerDetails" v-model="date_debut"/>
+                    <input type="text" id="heureDebutDetails" v-model="heure_debut"/>
+                    <input type="text" id="dateFinDetails" v-model="date_fin" />
+                    <input type="text" id="heureFinDetails" v-model="heure_fin"/>
                 </div>
 
                 <div>
@@ -396,15 +420,15 @@
 
                 <h4>Produit</h4>
                 <div id="refProduitDetails">
-                    <input type="text" id="refDetails" v-bind:alue="interventions.ref"/>
-                    <input type="text" id="qteProduitDetails" v-bind:value="interventions.qte"/>
-                    <input type="text" id="libelleProduitDetails" v-bind:value="interventions.libelle"/>
+                    <input type="text" id="refDetails" v-model="produit.ref"/>
+                    <input type="text" id="qteProduitDetails" v-model="produit.qte"/>
+                    <input type="text" id="libelleProduitDetails" v-model="produit.libelle"/>
                 </div>
 
                 <h4>Descriptions et commentaires</h4>
                 <div id="textareasDetails">
-                    <textarea name="description" id="descriptionDetails" cols="30" rows="10" v-bind:value="interventions.description"></textarea>
-                    <textarea name="commentaires" id="commentairesDetails" cols="30" rows="10" v-bind:value="interventions.commentaires"></textarea>
+                    <textarea name="description" id="descriptionDetails" cols="30" rows="10" v-model="description"></textarea>
+                    <textarea name="commentaires" id="commentairesDetails" cols="30" rows="10" v-model="commentaires"></textarea>
                 </div>
 
                 <input type="button" class="btn btn-secondary" id="modifierDetailsBtn" value="Modifier" />
@@ -418,10 +442,25 @@
                     getId = id - 1
 
                 this.etat = this.interventions[getId].etat
-
                 this.createur = this.interventions[getId].createur
-
-
+                this.intervenant = this.interventions[getId].intervenant
+                this.nom = this.interventions[getId].nom
+                this.prenom = this.interventions[getId].prenom
+                this.adresse1 = this.interventions[getId].adresse1
+                this.adresse2 = this.interventions[getId].adresse2
+                this.cp = this.interventions[getId].cp
+                this.ville = this.interventions[getId].ville
+                this.telephone = this.interventions[getId].telephone
+                this.mail = this.interventions[getId].mail
+                this.date_debut = this.interventions[getId].date_debut
+                this.heure_debut = this.interventions[getId].heure_debut
+                this.date_fin = this.interventions[getId].date_fin
+                this.heure_fin = this.interventions[getId].heure_fin
+                this.ref = this.interventions[getId].ref
+                this.qte = this.interventions[getId].qte
+                this.libelle = this.interventions[getId].libelle
+                this.description = this.interventions[getId].description
+                this.commentaires = this.interventions[getId].commentaires
             },
             editCreateur(){
                 return this.createur
