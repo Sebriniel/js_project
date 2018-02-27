@@ -81,63 +81,7 @@
             </form>
         </div>
     </div>
-
-    <div id="detailsForm">
-        <div id="formContainerDetails" class="displayNone" >
-            <form action="" method="post" id="myFormDetails" @submit.prevent="catchModifDetails">
-                <h4>Informations principales</h4>
-                <div id="intervInfoDetails">
-                    <select name="type" id="typeDetails" v-model="type">
-                        <option>Maintenance
-                        <option>Installation
-                        <option>Désinstallation
-                    </select>
-                    <input type="text" id="intervenantDetails" v-model="intervenant"/>
-                    <input type="text" id="etatDetails" v-model="etat"/>
-                </div>
-
-                <h4>Client</h4>
-                <div id="coordClientDetails">
-                    <input type="text" id="nomClientDetails" v-model="nom"  />
-                    <input type="text" id="prenomClientDetails" v-model="prenom"  />
-                    <input type="text" id="adresse1ClientDetails" v-model="adresse1"  />
-                    <input type="text" id="adresse2ClientDetails" v-model="adresse2"/>
-                    <input type="text" id="cpClientDetails" v-model="cp"  />
-                    <input type="text" id="villeClientDetails" v-model="ville"  />
-                    <input type="text" id="telephoneClientDetails" v-model="telephone"  />
-                    <input type="text" id="mailClientDetails" v-model="mail"/>
-                </div>
-
-                <h4>Dates et heures</h4>
-                <div id="datesDetails">
-                    <input type="text" v-model="date_debut"   id="datepickerDetails"/>
-                    <input type="text" id="heureDebutDetails" v-model="heure_debut"/>
-                    <input type="text" id="dateFinDetails" v-model="date_fin"  />
-                    <input type="text" id="heureFinDetails" v-model="heure_fin"/>
-                </div>
-
-                <div>
-                    <input type="text" id="createurDetails" v-model="createur"  />
-                </div>
-
-                <h4>Produit</h4>
-                <div id="refProduitDetails">
-                    <input type="text" id="refDetails" v-model="ref"/>
-                    <input type="text" id="qteProduitDetails" v-model="qte"/>
-                    <input type="text" id="libelleProduitDetails" v-model="libelle"/>
-                </div>
-
-                <h4>Descriptions et commentaires</h4>
-                <div id="textareasDetails">
-                    <textarea name="description" id="descriptionDetails" cols="30" rows="10" v-model="description"></textarea>
-                    <textarea name="commentaires" id="commentairesDetails" cols="30" rows="10" v-model="commentaires"></textarea>
-                </div>
-
-                <input type="button" class="btn btn-secondary" id="modifierDetailsBtn" value="Modifier" />
-                <input type="submit" class="btn btn-secondary displayNone" id="enregDetailsBtn" value="Enregistrer"/>
-            </form>
-        </div>
-    </div>
+    <editinterv :interventions="interventions"></editinterv>
 </div>
 
 
@@ -456,14 +400,76 @@
             <td>{{date_debut}}</td>
             <td>{{date_fin}}</td>
             <td>{{createur}}</td>
-            <td><a href="#formContainerDetails"><button @click="eventDetails(id)">Voir</button></a></td>
+            <td><a href="#formContainerDetails"><button @click="$child.eventDetails(id)">Voir</button></a></td>
         </tr>`,
+    })
+
+    Vue.component('editinterv', {
+        props: [
+            'interventions',
+            'id'
+        ],
+        template: `
+        <form action="" method="post" id="myFormDetails" @submit.prevent="catchModifDetails">
+                <h4>Informations principales</h4>
+                <div id="intervInfoDetails">
+                    <select name="type" id="typeDetails" v-bind:value="interventions.type">
+                        <option>Maintenance</option>
+                        <option>Installation</option>
+                        <option>Désinstallation</option>
+                    </select>
+                    <input type="text" id="intervenantDetails" v-bind:value="interventions.intervenant"/>
+                    <input type="text" id="etatDetails" v-bind:value="interventions.etat"/>
+                </div>
+
+                <h4>Client</h4>
+                <div id="coordClientDetails">
+                    <input type="text" id="nomClientDetails" v-bind:value="interventions.nom" />
+                    <input type="text" id="prenomClientDetails" v-bind:value="interventions.prenom" />
+                    <input type="text" id="adresse1ClientDetails" v-bind:value="interventions.adresse1" />
+                    <input type="text" id="adresse2ClientDetails" v-bind:value="interventions.adresse2"/>
+                    <input type="text" id="cpClientDetails" v-bind:value="interventions.cp" />
+                    <input type="text" id="villeClientDetails" v-bind:value="interventions.ville" />
+                    <input type="text" id="telephoneClientDetails" v-bind:value="interventions.telephone" />
+                    <input type="text" id="mailClientDetails" v-bind:value="interventions.mail"/>
+                </div>
+
+                <h4>Dates et heures</h4>
+                <div id="datesDetails">
+                    <input type="text"  id="datepickerDetails" v-bind:value="interventions.date_debut"/>
+                    <input type="text" id="heureDebutDetails" v-bind:value="interventions.heure_debut"/>
+                    <input type="text" id="dateFinDetails" v-bind:value="interventions.date_fin" />
+                    <input type="text" id="heureFinDetails" v-bind:value="interventions.heure_fin"/>
+                </div>
+
+                <div>
+                    <input type="text" id="createurDetails" v-bind:value="interventions.createur" />
+                </div>
+
+                <h4>Produit</h4>
+                <div id="refProduitDetails">
+                    <input type="text" id="refDetails" v-bind:alue="interventions.ref"/>
+                    <input type="text" id="qteProduitDetails" v-bind:value="interventions.qte"/>
+                    <input type="text" id="libelleProduitDetails" v-bind:value="interventions.libelle"/>
+                </div>
+
+                <h4>Descriptions et commentaires</h4>
+                <div id="textareasDetails">
+                    <textarea name="description" id="descriptionDetails" cols="30" rows="10" v-bind:value="interventions.description"></textarea>
+                    <textarea name="commentaires" id="commentairesDetails" cols="30" rows="10" v-bind:value="interventions.commentaires"></textarea>
+                </div>
+
+                <input type="button" class="btn btn-secondary" id="modifierDetailsBtn" value="Modifier" />
+                <input type="submit" class="btn btn-secondary displayNone" id="enregDetailsBtn" value="Enregistrer"/>
+            </form>
+        </div>
+        `,
         methods: {
             eventDetails(id){
                 vm.eventDetails(id)
-                var formContainerDetails = document.getElementById("formContainerDetails")
-                formContainerDetails.classList.toggle("displayNone")
+                console.log(id)
             }
+
         }
     })
 
@@ -1225,8 +1231,8 @@
                 }
             },
             eventDetails(id){
-                console.log(this.interventions[id - 1].client[0].adresse1)
-                console.log(this.interventions[id - 1].type)
+                //console.log(this.interventions[id - 1].client[0].adresse1)
+                //console.log(this.interventions[id - 1].type)
 
                 //type intervention
                 //var typeDetails = document.getElementById("typeDetails")
@@ -1272,121 +1278,31 @@
 
                 for (let i=0; i<this.interventions.length; i++){
                     for (let j=0; j<inputs.length; j++){
-                        console.log(inputs[j])
-                        if(inputs[j] === "produit"){
+                        if(Array.isArray(inputs[j]) ){
+                            for (let k=0; k<inputs[j].length; k++){
+                                //console.log(inputs[j][k]);
+                            }
+//                            console.log(this[produit][inputs[j]])
+//                            console.log(this.interventions[id - 1].produit[inputs[j]])
+//                            console.log("-----------------------")
+//                            this[produit][inputs[j]] = this.interventions[id - 1].produit[inputs[j]]
 //                            this.inputs[j] = this.interventions[id - 1].produit[0].inputs[j]
                         }else if(inputs[j] === "client"){
 //                            this.inputs[j] = this.interventions[id - 1].client[0].inputs[j]
+                            this[client][inputs[j]] = this.interventions[id - 1].client[inputs[j]]
                         }else {
-                            let variable = inputs[j]
                             //console.log(this.interventions[id - 1][inputs[j]])
-                            this.variable = this.interventions[id - 1][inputs[j]]
+                            this[inputs[j]] = this.interventions[id - 1][inputs[j]]
                         }
                     }
                     //this.otherInputs[i] = this.interventions[id - 1].otherInputs[i]
                 }
-//                this.intervenant = this.interventions[id - 1].intervenant
-//                this.intervenant.disabled = true
-
-                //etat
-//                var etatDetails = document.getElementById("etatDetails")
-//                etatDetails.value = this.interventions[id - 1].etat
-//                etatDetails.disabled = true
 //
-//                //nom client
-//                var nomClientDetails = document.getElementById("nomClientDetails")
-//                nomClientDetails.value = this.interventions[id - 1].client[0].nom
-//                nomClientDetails.disabled = true
-//
-//                //prenom client
-//                var prenomClientDetails = document.getElementById("prenomClientDetails")
-//                prenomClientDetails.value = this.interventions[id - 1].client[0].prenom
-//                prenomClientDetails.disabled = true
-//
-//                //adresse1 client
-//                var adresse1ClientDetails = document.getElementById("adresse1ClientDetails")
-//                adresse1ClientDetails.value = this.interventions[id - 1].client[0].adresse1
-//                adresse1ClientDetails.disabled = true
-//
-//                //adresse2 client
-//                var adresse2ClientDetails = document.getElementById("adresse2ClientDetails")
-//                adresse2ClientDetails.value = this.interventions[id - 1].client[0].adresse2
-//                adresse2ClientDetails.disabled = true
-//
-//                //cp client
-//                var cpClientDetails = document.getElementById("cpClientDetails")
-//                cpClientDetails.value = this.interventions[id - 1].client[0].cp
-//                cpClientDetails.disabled = true
-//
-//                //ville client
-//                var villeClientDetails = document.getElementById("villeClientDetails")
-//                villeClientDetails.value = this.interventions[id - 1].client[0].ville
-//                villeClientDetails.disabled = true
-//
-//                //telephone client
-//                var telephoneClientDetails = document.getElementById("telephoneClientDetails")
-//                telephoneClientDetails.value = this.interventions[id - 1].client[0].telephone
-//                telephoneClientDetails.disabled = true
-//
-//                //mail client
-//                var mailClientDetails = document.getElementById("mailClientDetails")
-//                mailClientDetails.value = this.interventions[id - 1].client[0].mail
-//                mailClientDetails.disabled = true
-//
-//                //date début
-//                var datepickerDetails = document.getElementById("datepickerDetails")
-//                datepickerDetails.value = this.interventions[id - 1].date_debut
-//                datepickerDetails.disabled = true
-//
-//                //date fin
-//                var DateFinDetails = document.getElementById("dateFinDetails")
-//                DateFinDetails.value = this.interventions[id - 1].date_fin
-//                DateFinDetails.disabled = true
-//
-//                //heure début
-//                var heureDebutDetails = document.getElementById("heureDebutDetails")
-//                heureDebutDetails.value = this.interventions[id - 1].heure_debut
-//                heureDebutDetails.disabled = true
-//
-//                //heure fin
-//                var heureFinDetails = document.getElementById("heureFinDetails")
-//                heureFinDetails.value = this.interventions[id - 1].heure_fin
-//                heureFinDetails.disabled = true
-//
-//                //createur
-//                var createurDetails = document.getElementById("createurDetails")
-//                createurDetails.value = this.interventions[id - 1].createur
-//                createurDetails.disabled = true
-//
-//                //ref produits
-//                var refDetails = document.getElementById("refDetails")
-//                refDetails.value = this.interventions[id - 1].produit[0].ref
-//                refDetails.disabled = true
-//
-//                //qte produits
-//                var qteProduitDetails = document.getElementById("qteProduitDetails")
-//                qteProduitDetails.value = this.interventions[id - 1].produit[0].qte
-//                qteProduitDetails.disabled = true
-//
-//                //libelle produits
-//                var libelleProduitDetails = document.getElementById("libelleProduitDetails")
-//                libelleProduitDetails.value = this.interventions[id - 1].produit[0].libelle
-//                libelleProduitDetails.disabled = true
-//
-//                //description
-//                var descriptionDetails = document.getElementById("descriptionDetails")
-//                descriptionDetails.value = this.interventions[id - 1].description
-//                descriptionDetails.disabled = true
-//
-//                //commentaires
-//                var commentairesDetails = document.getElementById("commentairesDetails")
-//                commentairesDetails.value = this.interventions[id - 1].commentaires
-//                commentairesDetails.disabled = true
             },
 
             catchModifDetails(){
                 var intervenantDetails = document.getElementById("intervenantDetails")
-                console.log(this.intervenant)
+                //console.log(this.intervenant)
             },
         }
     });
@@ -1429,7 +1345,7 @@
         var commentairesDetails = document.getElementById('commentairesDetails');
         var enregDetailsBtn = document.getElementById('enregDetailsBtn')
 
-        console.log(dateFinDetails)
+        //console.log(dateFinDetails)
         typeDetails.disabled = false;
         intervenantDetails.disabled = false;
         etatDetails.disabled = false;
