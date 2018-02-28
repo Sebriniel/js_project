@@ -96,6 +96,7 @@
             },
             editIdInterv: (state, newValue) => {
                 state.idInterv = newValue
+                state.boolEditInterv = newValue
             }
         }
     })
@@ -136,11 +137,9 @@
         computed: {
             nbrPages() { // nbr pagination
                 let itemsPerPage = store.getters.getterSelect,
-                    totalInterv = store.getters.getterTotalInterv
 
                 itemsPerPage === 0 ? itemsPerPage = 10 : itemsPerPage
 
-                this.nbrPagination = Math.ceil(totalInterv / itemsPerPage)
                 this.myCurrentPage = 1
 
                 return this.nbrPagination
@@ -235,54 +234,25 @@
         computed: {
             filterBy() {
                 let totalInterventions = this.interventions.length,
-                    getCurPage =  store.getters.getterCurrentPage,
                     selectVal = store.getters.getterSelect,
                     startSlice = store.getters.getterStartSlice,
-                    bolChangePage = store.getters.getterChangePage,
-                    index =  store.getters.getterIndex,
                     prev = store.getters.getterPrev,
-                    next = store.getters.getterNext
 
                 getCurPage === 1 ? this.curPage = 1 : ''
                 selectVal === 0 ? selectVal = 10 : 0
                 store.commit('sendTotalPages', totalInterventions)
 
-                if(bolChangePage === true){ //select page ? => true
-                    if(next === true){ // next page
 
-                        startTab = index * selectVal
-                        store.commit('editNext', false)
 
-                        return this.interventions.slice(startTab, (startTab  + selectVal))
-                    }else if(prev === true){ // prev page
 
-                        startTab = getCurPage * selectVal
-                        store.commit('editPrev', false)
 
-                        return this.interventions.slice((startTab - selectVal), startTab)
                     }else{
-                        startTab = getCurPage * selectVal
 
-                        return this.interventions.slice(startTab, (startTab  + selectVal))
                     }
-                }else{ //select page ? => false => classic pagination => nextPage++ / prevPage--
-                    if(getCurPage > this.curPage){  // next page
 
-                        startSlice += selectVal
-                        store.commit('editStartSlice', startSlice)
-                        this.curPage = getCurPage
 
-                        return this.interventions.slice(startSlice, (startSlice  + selectVal))
-                    }else if(getCurPage < this.curPage){ // prev page
 
-                        startSlice -= selectVal
-                        store.commit('editStartSlice', startSlice)
-                        this.curPage = getCurPage
 
-                        return this.interventions.slice(startSlice, startSlice + selectVal)
-                    }else{ // init tab => slice(0,10)
-                        store.commit('editStartSlice', 0)
-                        return this.interventions.slice(0, selectVal)
                     }
                 }
             }
@@ -290,14 +260,6 @@
         template: `
         <table>
             <tr>
-                <th>Numéro</th>
-                <th>Type</th>
-                <th>Intervenant</th>
-                <th>Client</th>
-                <th>Etat</th>
-                <th>Date Début</th>
-                <th>Date Fin</th>
-                <th>Créateur</th>
             </tr>
 
             <intervention v-for="(interv, index) in filterBy"
@@ -309,8 +271,6 @@
              :date_debut="interv.date_debut"
              :date_fin="interv.date_fin"
              :createur="interv.createur"
-             :key="index"
-             :href="interv.href">
             </intervention>
         </table>`,
     })
@@ -329,7 +289,6 @@
         ],
         template: `
         <tr>
-            <td><a :href="href">{{id}}</a></td>
             <td>{{type}}</td>
             <td>{{intervenant}}</td>
             <td>{{client[0].prenom}} {{client[0].nom}}</td>
@@ -420,32 +379,6 @@
                 let id = store.getters.getterIdInterv,
                     getId = id - 1
 
-                this.displayForm = true
-                this.type = this.interventions[getId].type
-
-                this.etat = this.interventions[getId].etat
-                this.createur = this.interventions[getId].createur
-                this.intervenant = this.interventions[getId].intervenant
-                this.description = this.interventions[getId].description
-                this.commentaires = this.interventions[getId].commentaires
-
-                this.client.nom = this.interventions[getId].client[0].nom
-                this.client.prenom = this.interventions[getId].client[0].prenom
-                this.client.adresse1 = this.interventions[getId].client[0].adresse1
-                this.client.adresse2 = this.interventions[getId].client[0].adresse2
-                this.client.cp = this.interventions[getId].client[0].cp
-                this.client.ville = this.interventions[getId].client[0].ville
-                this.client.telephone = this.interventions[getId].client[0].telephone
-                this.client.mail = this.interventions[getId].client[0].mail
-
-                this.date_debut = this.interventions[getId].date_debut
-                this.heure_debut = this.interventions[getId].heure_debut
-                this.date_fin = this.interventions[getId].date_fin
-                this.heure_fin = this.interventions[getId].heure_fin
-
-                this.produit.ref = this.interventions[getId].produit[0].ref
-                this.produit.qte = this.interventions[getId].produit[0].qte
-                this.produit.libelle = this.interventions[getId].produit[0].libelle
             },
             },
             catchModifDetails(){
