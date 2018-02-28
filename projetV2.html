@@ -477,41 +477,40 @@
             },
             searchByColumns(index){
 
-
                 let input = this.searchInColumn[index],
                     columnNames = this.returnColumnNames(index),
                     tabSearch = store.getters.getterTabSearch,
                     tabResult = []
 
-
                 if(input.trim().length === 0){
-                    tabSearch = this.interventions
+                    store.commit('editTabSearch', this.interventions)
+                    return tabSearch = this.interventions
     //                    for(var key in this.searchInColumn) {
     //                        //this.searchByColumns(key)
     //                        //push index input not empty ?
     //                    }
                 }
 
-                tabSearch.map(function(a){
+                tabSearch.map(function(interv){
 
                     if(columnNames === 'client'){
 
-                        let prenom =  a[columnNames][0].prenom.toLowerCase() + ' ' +  a[columnNames][0].nom.toLowerCase()
+                        let prenom =  interv[columnNames][0].prenom.toLowerCase() + ' ' +  interv[columnNames][0].nom.toLowerCase()
 
                         var search = prenom.indexOf(input)
 
-                        search !== -1 ? tabResult.push(a) : ''
+                        search !== -1 ? tabResult.push(interv) : ''
 
                     }else if(columnNames === 'id'){
-
-                        if (a[columnNames] === parseInt(input)){
-                            tabResult.push(a)
+console.log('id')
+                        if (interv[columnNames] === parseInt(input)){
+                            tabResult.push(interv)
                         }
                     }else{
 
-                        var search = a[columnNames].toLowerCase().indexOf(input)
+                        var search = interv[columnNames].toLowerCase().indexOf(input)
 
-                        search !== -1 ? tabResult.push(a) : ''
+                        search !== -1 ? tabResult.push(interv) : ''
                     }
                 })
 
