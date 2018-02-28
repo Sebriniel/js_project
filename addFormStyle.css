@@ -28,13 +28,13 @@ input{
 tr input{width: 150px;}
 
 #root{
-    max-width: 1024px;
+    max-width: 1280px;
     margin: auto;
 }
 
-/*.searchColumn input{*/
-    /*width: 50px;*/
-/*}*/
+.searchColumn input{
+    width: 100px;
+}
 
 #topButton{
     width: 90%;
