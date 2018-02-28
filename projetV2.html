@@ -606,51 +606,55 @@
             }
         },
         template: `
-        <table>
-            <input type="text" placeholder="search" v-model="searchInTab">
+        <div>
             <div>
-                <button @click="displayFilters()" class="btn btn-secondary">Filtres</button>
+                <input type="text" placeholder="search" v-model="searchInTab">
+                <div>
+                    <button @click="displayFilters()" class="btn btn-secondary">Filtres</button>
+                </div>
+                <div>
+                    <input type="text"
+                    placeholder="Numéro de l'intervention"
+                    v-model="deleteIdInterv"
+                    :class="[displayDeleteInterv ? '' : 'displayNone']">
+                    <input type="submit" class="btn btn-secondary" value="Supprimer une intervention" @click="catchRemove()">
+                </div>
+                <div>
+                    <button @click="displayAddForm()" :class="['btn btn-secondary', displayButtonAddInterv ? '' : 'displayNone']">Ajouter une intervention</button>
+                </div>
             </div>
-            <div>
-                <input type="text"
-                placeholder="Numéro de l'intervention"
-                v-model="deleteIdInterv"
-                :class="[displayDeleteInterv ? '' : 'displayNone']">
-                <input type="submit" class="btn btn-secondary" value="Supprimer une intervention" @click="catchRemove()">
-            </div>
-            <div>
-                <button @click="displayAddForm()" :class="['btn btn-secondary', displayButtonAddInterv ? '' : 'displayNone']">Ajouter une intervention</button>
-            </div>
-            <tr>
-            <th>Suppression</th>
-                <th :class="[filters ? 'displayNone' : '']" v-for="columnName, index in searchInputsNames">{{columnName}}
-                    <span @click="orderByColumn(index)" :class="['arrow', boolArrow[index] ? 'orderAsc' : 'orderDsc']"></span>
-                </th>
-                <th :class="[filters ? '' : 'displayNone']" v-for="(columnName, index) in searchInputsNames">
-                    <input
-                    type="text"
-                    :ref="returnColumnNames(index)"
-                    v-on:input="searchByColumns(index)"
-                    :placeholder="columnName"
-                    v-model="searchInColumn[index]"/>
-                </th>
-            </tr>
+            <table>
+                <tr>
+                <th>Suppression</th>
+                    <th :class="[filters ? 'displayNone' : '']" v-for="columnName, index in searchInputsNames">{{columnName}}
+                        <span @click="orderByColumn(index)" :class="['arrow', boolArrow[index] ? 'orderAsc' : 'orderDsc']"></span>
+                    </th>
+                    <th :class="[filters ? '' : 'displayNone']" v-for="(columnName, index) in searchInputsNames">
+                        <input
+                        type="text"
+                        :ref="returnColumnNames(index)"
+                        v-on:input="searchByColumns(index)"
+                        :placeholder="columnName"
+                        v-model="searchInColumn[index]"/>
+                    </th>
+                </tr>
 
-            <intervention v-for="(interv, index) in filterBy"
-             :id="interv.id"
-             :type="interv.type"
-             :intervenant="interv.intervenant"
-             :client="interv.client"
-             :etat="interv.etat"
-             :date_debut="interv.date_debut"
-             :date_fin="interv.date_fin"
-             :createur="interv.createur"
-             :key="index">
-            </intervention>
-            <p :class="[searchErrorMsg ? 'searchError' : 'displayNone']">Aucun résultat pour votre recherche</p>
-            <button @click="confirmDeleteInterv()" :class="['btn btn-secondary', confirmDeleteInterventions ? 'deleteInterv' : 'displayNone']">Supprimer les interventions</button>
+                <intervention v-for="(interv, index) in filterBy"
+                 :id="interv.id"
+                 :type="interv.type"
+                 :intervenant="interv.intervenant"
+                 :client="interv.client"
+                 :etat="interv.etat"
+                 :date_debut="interv.date_debut"
+                 :date_fin="interv.date_fin"
+                 :createur="interv.createur"
+                 :key="index">
+                </intervention>
+                <p :class="[searchErrorMsg ? 'searchError' : 'displayNone']">Aucun résultat pour votre recherche</p>
+                <button @click="confirmDeleteInterv()" :class="['btn btn-secondary', confirmDeleteInterventions ? 'deleteInterv' : 'displayNone']">Supprimer les interventions</button>
 
-        </table>`,
+            </table>
+        </div>`,
     })
 
     Vue.component('intervention', {
