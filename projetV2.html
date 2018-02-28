@@ -678,7 +678,7 @@ console.log('id')
         template: `
         <tr>
             <input type="checkbox" @click="selectCheckbox(id)" v-model="checkedInterv[id]">
-            <td>{{id}}</td>
+            <td @dblclick="editId(id)">{{id}}</td>
             <td>{{type}}</td>
             <td>{{intervenant}}</td>
             <td>{{client[0].prenom}} {{client[0].nom}}</td>
@@ -689,6 +689,18 @@ console.log('id')
             <td><button @click="eventDetails(id)">Voir</button></td>
         </tr>`,
         methods:{
+            editId(id){
+
+                let txt = '',
+                    getId = prompt('Entrez votre nouvelle valeur pour l')
+
+                if (getId === null || getId === '') {
+                    txt = ''
+                } else {
+
+                   this.$root.$options.methods.editIdParent(getId)
+                }
+            },
             eventDetails(id){
                 store.commit('editIdInterv', id)
                 store.commit('editBoolEditInterv', true)
@@ -1645,6 +1657,11 @@ console.log('id')
         },
         mounted(){
             store.commit('editTabSearch', this.interventions)
+        },
+        methods:{
+            editIdParent(id){
+               console.log(this.interventions)
+            }
         }
     })
 
