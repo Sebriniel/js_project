@@ -85,6 +85,7 @@ td {
     color: white !important;
 }
 
+<<<<<<< HEAD
 .editInterv, .deleteInterv, .editForm{
     display: block;
 }
@@ -119,3 +120,6 @@ tr input{width: 150px;}
     border-right: 6px solid transparent;
     border-bottom: 6px solid blue;
 }
+=======
+.textColor{color: #575757;}
+>>>>>>> parent of 4b63267... Merge branch 'master' of https://github.com/Sebriniel/js_project
