@@ -27,7 +27,6 @@
 <script src="moment.js"></script>
 <script>
 
-    Vue.use(Vuex);
 
     const store = new Vuex.Store({
         state: {
@@ -854,7 +853,6 @@
 
                 }else{
                     //add one interv
-
                     this.catchSubmit()
                 }
 
@@ -1536,9 +1534,6 @@
                     ]
                 }
             ]
-        },
-        methods: {
-
         },
         mounted(){
             store.commit('editTabSearch', this.interventions)
