@@ -38,6 +38,7 @@ tr input{width: 150px;}
 
 #topButton{
     width: 90%;
+    float: right;
 }
 
 #selectNbrItem{
