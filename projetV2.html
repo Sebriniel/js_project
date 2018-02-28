@@ -136,8 +136,20 @@
         computed: {
             nbrPages() { // nbr pagination
                 let itemsPerPage = store.getters.getterSelect,
+                    totalInterv = store.getters.getterTotalInterv,
+                    searchColumn = store.getters.getterSearchColumn,
+                    tabSearch =  store.getters.getterTabSearch
 
                 itemsPerPage === 0 ? itemsPerPage = 10 : itemsPerPage
+
+                let tabLength = ''
+                if(searchColumn === true){
+                    tabLength = tabSearch.length
+                    this.nbrPagination = Math.ceil(tabLength / itemsPerPage)
+                }else{
+                    tabLength = totalInterv
+                    this.nbrPagination = Math.ceil(totalInterv / itemsPerPage)
+                }
 
                 this.myCurrentPage = 1
 
