@@ -24,6 +24,7 @@
 
 <script src="vue.js"></script>
 <script src="vuex.js"></script>
+<script src="moment.js"></script>
 <script>
 
     Vue.use(Vuex);
@@ -745,10 +746,13 @@
         <form action="" method="post" :class="[displayForm ? 'editForm' : 'displayNone']" @submit.prevent="catchModifDetails">
                 <h4>Informations principales</h4>
                 <div id="intervInfoDetails">
+                    <select name="type" v-model="type">
                         <option>Maintenance</option>
                         <option>Installation</option>
                         <option>Désinstallation</option>
                     </select>
+                    <input type="text" v-model="intervenant"/>
+                    <select name="type" v-model="etat">
                         <option>En cours</option>
                         <option>Terminé</option>
                     </select>
@@ -756,21 +760,39 @@
 
                 <h4>Client</h4>
                 <div id="coordClientDetails">
+                    <input type="text" v-model="client.nom" />
+                    <input type="text" v-model="client.prenom" />
+                    <input type="text" v-model="client.adresse1" />
+                    <input type="text" v-model="client.adresse2"/>
+                    <input type="text" v-model="client.cp" />
+                    <input type="text" v-model="client.ville" />
+                    <input type="text" v-model="client.telephone" />
+                    <input type="text" v-model="client.mail"/>
                 </div>
 
                 <h4>Dates et heures</h4>
                 <div id="datesDetails">
+                    <input type="text" v-model="date_debut"/>
+                    <input type="text" v-model="heure_debut"/>
+                    <input type="text" v-model="date_fin" />
+                    <input type="text" v-model="heure_fin"/>
                 </div>
 
                 <div>
+                    <input type="text" v-model="createur" />{{id}}
                 </div>
 
                 <h4>Produit</h4>
                 <div id="refProduitDetails">
+                    <input type="text" v-model="produit.ref"/>
+                    <input type="text" v-model="produit.qte"/>
+                    <input type="text" v-model="produit.libelle"/>
                 </div>
 
                 <h4>Descriptions et commentaires</h4>
                 <div id="textareasDetails">
+                    <textarea name="description" cols="30" rows="10" v-model="description"></textarea>
+                    <textarea name="commentaires" cols="30" rows="10" v-model="commentaires"></textarea>
                 </div>
 
                 <input type="submit" class="btn btn-secondary" id="enregDetailsBtn" value="Enregistrer"/>
@@ -782,6 +804,7 @@
                 let id = store.getters.getterIdInterv,
                     boolEditInterv = store.getters.getterBoolEditInterv,
                     getId = id - 1
+
 
                 if(boolEditInterv === true){
 
@@ -876,7 +899,53 @@
                 }else{
                     //add one interv
 
+                    this.cac
+                }
 
+                store.commit('editBoolEditInterv', false)
+            },
+            catchSubmit(){
+                if (this.type=="" || this.intervenant=="" || this.date_debut == "" || this.date_fin == "" || this.createur == "" || this.nom == "" || this.prenom == "" || this.adresse1 == "" || this.cp == "" || this.ville == "" || this.telephone == ""){
+                    alert('Merci de remplir tous les champs.')
+                }else{
+                    var formContainer = document.getElementById("formContainer");
+                    formContainer.classList.add("displayNone");
+                    var idLastInterv = this.interventions.length-1;
+                    var id = this.interventions[idLastInterv].id;
+                    this.interventions.push({
+                        id: id+1,
+                        type: this.type,
+                        intervenant: this.intervenant,
+                        etat: 'A faire',
+                        date_debut: this.date_debut,
+                        heure_debut: this.heure_debut,
+                        date_fin: this.date_fin,
+                        heure_fin: this.heure_fin,
+                        createur: this.createur,
+                        description: this.description,
+                        commentaires: this.commentaires,
+                        produit: [
+                            {
+                                ref: this.ref,
+                                qte: this.qte,
+                                libelle: this.libelle,
+                            }
+                        ],
+                        client: [
+                            {
+                                nom: this.nom,
+                                prenom: this.prenom,
+                                adresse1: this.adresse1,
+                                adresse2: this.adresse2,
+                                cp: this.cp,
+                                ville: this.ville,
+                                telephone: this.telephone,
+                                mail: this.mail
+                            }
+                        ]
+                    });
+                    alert("L'intervention a bien été ajoutée!")
+                }
             }
         }
     })
