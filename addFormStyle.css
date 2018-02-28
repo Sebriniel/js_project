@@ -13,6 +13,10 @@ h1 {
     text-align: center;
 }
 
+.btn {
+    background-color: #0f0098;;
+}
+
 #addForm{
     width: 40%;
     margin-left: 50px;
@@ -65,7 +69,11 @@ td {
 
 .displayNone {display: none;}
 
-#pagination {display: inline-block;}
+#pagination {
+    display: inline-block;
+    margin-left: 40%;
+    margin-top: 20px;
+}
 
 #pagination a {
     color: #575757;
@@ -81,18 +89,71 @@ td {
 #pagination a:hover:not(.active) {background-color: #ddd;}
 
 .active{
-    background-color: #00d1b2;
+    background-color: #0f0098;
     color: white !important;
 }
 
-.editInterv, .deleteInterv, .editForm{
+.editInterv, .deleteInterv{
     display: block;
+}
+
+.editForm{
+    width: 50%;
+    margin: auto;
+}
+
+.editForm, #blockPrincipale, #blockClient, #blockDateHeure, #blockProduit, #blockCommentDescript{
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+#createur {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    margin-top: 20px;
+}
+
+#intervInfoDetails{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#intervInfoDetails select, #intervInfoDetails input {
+    margin-right: 10px;
+}
+
+h4 {
+    text-align: center;
+}
+
+#coordClientDetails, #datesDetails, #refProduitDetails, #textareasDetails {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#refProduitDetails, #textareasDetails{
+    justify-content: center;
+}
+
+#refProduitDetails input, #textareasDetails textarea {
+    margin-right: 10px;
+}
+
+#enregDetailsBtn {
+    width: 150px;
+    margin: auto;
+    margin-top: 20px;
 }
 
 .textColor{
     color: #575757;
-    position: relative;
-    top: 25px;
 }
 
 input{
@@ -178,7 +239,7 @@ tr input{width: 150px;}
         padding: 0;
     }
 
-    #root div:first-of-type div:first-of-type{
+    #root div:nth-of-type(2) div:first-of-type{
         width: 50%;
         margin: auto;
         display: flex;
@@ -186,7 +247,13 @@ tr input{width: 150px;}
         align-items: center;
     }
 
-    #root div:first-of-type div:first-of-type div, #root div:first-of-type div:first-of-type input:first-of-type {
+    #root div:nth-of-type(2) div:first-of-type div, #root div:nth-of-type(2) div:first-of-type input:first-of-type {
+        margin-bottom: 10px;
+    }
+
+    #root .textColor {
+        margin: auto;
+        width: 50px;
         margin-bottom: 10px;
     }
 
@@ -198,14 +265,15 @@ tr input{width: 150px;}
 }
 
 @media screen and (min-width: 1080px) {
-    #root div:first-of-type div:first-of-type{
+    #root div:nth-of-type(2) div:first-of-type{
         display:flex;
         flex-direction: row;
         justify-content:space-around;
         margin-bottom: 10px;
+
     }
 
-    #root div:first-of-type div:first-of-type div:nth-of-type(2) input:nth-of-type(2){
+    #root div:nth-of-type(2) div:first-of-type div:nth-of-type(2) input:nth-of-type(2){
         margin-right: 30px;
     }
 
@@ -213,7 +281,12 @@ tr input{width: 150px;}
         margin:auto;
     }
 
-    #root div:first-of-type div:first-of-type input:first-of-type{
+    #root div:nth-of-type(2) div:first-of-type input:first-of-type{
         height: 30px;
+    }
+
+    .textColor{
+        position: relative;
+        top: 25px;
     }
 }
