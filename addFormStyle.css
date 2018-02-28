@@ -110,9 +110,8 @@ td {
 
 #createur {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
-    align-items: flex-end;
     margin-top: 20px;
 }
 
@@ -130,7 +129,7 @@ h4 {
     text-align: center;
 }
 
-#coordClientDetails, #datesDetails, #refProduitDetails, #textareasDetails {
+#coordClientDetails, #datesDetails, #refProduitDetails, #textareasDetails, #createurDetails {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -273,6 +272,10 @@ tr input{width: 150px;}
 
     }
 
+    #table td button {
+        height: 20px;
+    }
+
     #root div:nth-of-type(2) div:first-of-type div:nth-of-type(2) input:nth-of-type(2){
         margin-right: 30px;
     }
@@ -288,5 +291,11 @@ tr input{width: 150px;}
     .textColor{
         position: relative;
         top: 25px;
+    }
+
+    .shorten {
+        padding: 6px;
+        margin-top: 2px;
+        margin-bottom: 2px;
     }
 }

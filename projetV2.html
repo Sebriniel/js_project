@@ -714,7 +714,7 @@ console.log(this.interventions)
             <td @dblclick="editDateDebut(id)">{{date_debut}}</td>
             <td @dblclick="editDateFin(id)">{{date_fin}}</td>
             <td @dblclick="editCreateur(id)">{{createur}}</td>
-            <td><button @click="eventDetails(id)" class="btn btn-secondary">Voir</button></td>
+            <td><button @click="eventDetails(id)" class="btn btn-secondary shorten">Voir</button></td>
         </tr>`,
         methods:{
             editId(id){
@@ -851,7 +851,10 @@ console.log(this.interventions)
                 </div>
 
                 <div id="createur">
-                    <input type="text" v-model="createur" />{{id}}
+                    <h4> Créateur</h4>
+                    <div id="createurDetails">
+                        <input type="text" v-model="createur" />{{id}}
+                    </div>
                 </div>
 
                 <div id="blockProduit">
