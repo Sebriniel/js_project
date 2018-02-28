@@ -250,54 +250,25 @@
         computed: {
             filterBy() {
                 let totalInterventions = this.interventions.length,
-                    getCurPage =  store.getters.getterCurrentPage,
                     selectVal = store.getters.getterSelect,
                     startSlice = store.getters.getterStartSlice,
-                    bolChangePage = store.getters.getterChangePage,
-                    index =  store.getters.getterIndex,
                     prev = store.getters.getterPrev,
-                    next = store.getters.getterNext
 
                 getCurPage === 1 ? this.curPage = 1 : ''
                 selectVal === 0 ? selectVal = 10 : 0
                 store.commit('sendTotalPages', totalInterventions)
 
-                if(bolChangePage === true){ //select page ? => true
-                    if(next === true){ // next page
 
-                        startTab = index * selectVal
-                        store.commit('editNext', false)
 
-                        return this.interventions.slice(startTab, (startTab  + selectVal))
-                    }else if(prev === true){ // prev page
 
-                        startTab = getCurPage * selectVal
-                        store.commit('editPrev', false)
 
-                        return this.interventions.slice((startTab - selectVal), startTab)
                     }else{
-                        startTab = getCurPage * selectVal
 
-                        return this.interventions.slice(startTab, (startTab  + selectVal))
                     }
-                }else{ //select page ? => false => classic pagination => nextPage++ / prevPage--
-                    if(getCurPage > this.curPage){  // next page
 
-                        startSlice += selectVal
-                        store.commit('editStartSlice', startSlice)
-                        this.curPage = getCurPage
 
-                        return this.interventions.slice(startSlice, (startSlice  + selectVal))
-                    }else if(getCurPage < this.curPage){ // prev page
 
-                        startSlice -= selectVal
-                        store.commit('editStartSlice', startSlice)
-                        this.curPage = getCurPage
 
-                        return this.interventions.slice(startSlice, startSlice + selectVal)
-                    }else{ // init tab => slice(0,10)
-                        store.commit('editStartSlice', 0)
-                        return this.interventions.slice(0, selectVal)
                     }
                 }
             }
@@ -305,14 +276,6 @@
         template: `
         <table>
             <tr>
-                <th>Numéro</th>
-                <th>Type</th>
-                <th>Intervenant</th>
-                <th>Client</th>
-                <th>Etat</th>
-                <th>Date Début</th>
-                <th>Date Fin</th>
-                <th>Créateur</th>
             </tr>
 
             <intervention v-for="(interv, index) in filterBy"
@@ -324,8 +287,6 @@
              :date_debut="interv.date_debut"
              :date_fin="interv.date_fin"
              :createur="interv.createur"
-             :key="index"
-             :href="interv.href">
             </intervention>
         </table>`,
     })
@@ -339,12 +300,10 @@
             'etat',
             'date_debut',
             'date_fin',
-            'createur',
-            'href'
+            'createur'
         ],
         template: `
         <tr>
-            <td><a :href="href">{{id}}</a></td>
             <td>{{type}}</td>
             <td>{{intervenant}}</td>
             <td>{{client[0].prenom}} {{client[0].nom}}</td>
@@ -1235,10 +1194,6 @@
                 } else {
                     alert('Merci de remplir les champs requis!')
                 }
-            },
-            catchModifDetails() {
-                //console.log(this.intervenant)
-            },
         }
     })
 
