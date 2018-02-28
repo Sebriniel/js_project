@@ -745,13 +745,10 @@
         <form action="" method="post" :class="[displayForm ? 'editForm' : 'displayNone']" @submit.prevent="catchModifDetails">
                 <h4>Informations principales</h4>
                 <div id="intervInfoDetails">
-                    <select name="type" v-on:input="edit('type')" v-model="type">
                         <option>Maintenance</option>
                         <option>Installation</option>
                         <option>Désinstallation</option>
                     </select>
-                    <input type="text" v-on:input="edit('intervenant')" v-model="intervenant"/>
-                    <select name="type" v-on:input="edit('etat')" v-model="etat">
                         <option>En cours</option>
                         <option>Terminé</option>
                     </select>
@@ -759,39 +756,21 @@
 
                 <h4>Client</h4>
                 <div id="coordClientDetails">
-                    <input type="text" v-on:input="edit('client_nom')" v-model="client.nom" />
-                    <input type="text" v-on:input="edit('client_prenom')" v-model="client.prenom" />
-                    <input type="text" v-on:input="edit('client_adresse1')" v-model="client.adresse1" />
-                    <input type="text" v-on:input="edit('client_adresse2')" v-model="client.adresse2"/>
-                    <input type="text" v-on:input="edit('client_cp')" v-model="client.cp" />
-                    <input type="text" v-on:input="edit('client_ville')" v-model="client.ville" />
-                    <input type="text" v-on:input="edit('client_telephone')" v-model="client.telephone" />
-                    <input type="text" v-on:input="edit('client_mail')" v-model="client.mail"/>
                 </div>
 
                 <h4>Dates et heures</h4>
                 <div id="datesDetails">
-                    <input type="text" v-on:input="edit('date_debut')" v-model="date_debut"/>
-                    <input type="text" v-on:input="edit('heure_debut')" v-model="heure_debut"/>
-                    <input type="text" v-on:input="edit('date_fin')" v-model="date_fin" />
-                    <input type="text" v-on:input="edit('heure_fin')" v-model="heure_fin"/>
                 </div>
 
                 <div>
-                    <input type="text" v-on:input="edit('createur')" v-model="createur" />{{id}}
                 </div>
 
                 <h4>Produit</h4>
                 <div id="refProduitDetails">
-                    <input type="text" v-on:input="edit('produit_ref')" v-model="produit.ref"/>
-                    <input type="text" v-on:input="edit('produit_qte')" v-model="produit.qte"/>
-                    <input type="text" v-on:input="edit('produit_libelle')" v-model="produit.libelle"/>
                 </div>
 
                 <h4>Descriptions et commentaires</h4>
                 <div id="textareasDetails">
-                    <textarea name="description" v-on:input="edit('description')" cols="30" rows="10" v-model="description"></textarea>
-                    <textarea name="commentaires" v-on:input="edit('commentaires')" cols="30" rows="10" v-model="commentaires"></textarea>
                 </div>
 
                 <input type="submit" class="btn btn-secondary" id="enregDetailsBtn" value="Enregistrer"/>
@@ -804,7 +783,6 @@
                     boolEditInterv = store.getters.getterBoolEditInterv,
                     getId = id - 1
 
-                //commmit booleditinterv = false
                 if(boolEditInterv === true){
 
                     this.displayForm = true
@@ -862,85 +840,6 @@
                     this.produit.libelle = ''
                 }
             },
-            edit(model){
-
-                let id = store.getters.getterIdInterv,
-                    boolEditInterv = store.getters.getterBoolEditInterv,
-                    getId = id - 1
-
-                if(boolEditInterv === true) {
-                //edit interv
-                    switch (model) {
-                        case 'intervenant':
-                            return this.intervenant
-                            break
-                        case 'createur':
-                            return this.createur
-                            break
-                        case 'type':
-                            return this.type
-                            break
-                        case 'etat':
-                            return this.etat
-                            break
-                        case 'description':
-                            return this.description
-                            break
-                        case 'commentaires':
-                            return this.commentaires
-                            break
-                        case 'client_nom':
-                            return this.interventions[getId].client[0].nom = this.client.nom
-                            break
-                        case 'client_prenom':
-                            return this.interventions[getId].client[0].prenom = this.client.prenom
-                            break
-                        case 'client_adresse1':
-                            return this.interventions[getId].client[0].adresse1 = this.client.adresse1
-                            break
-                        case 'client_adresse2':
-                            return this.interventions[getId].client[0].adresse2 = this.client.adresse2
-                            break
-                        case 'client_cp':
-                            return this.interventions[getId].client[0].cp = this.client.cp
-                            break
-                        case 'client_ville':
-                            return this.interventions[getId].client[0].ville = this.client.ville
-                            break
-                        case 'client_telephone':
-                            return this.interventions[getId].client[0].telephone = this.client.telephone
-                            break
-                        case 'client_mail':
-                            return this.interventions[getId].client[0].mail = this.client.mail
-                            break
-                        case 'date_debut':
-                            return this.date_debut
-                            break
-                        case 'heure_debut':
-                            return this.heure_debut
-                            break
-                        case 'date_fin':
-                            return this.date_fin
-                            break
-                        case 'heure_fin':
-                            return this.heure_fin
-                            break
-                        case 'produit_ref':
-                            return this.interventions[getId].produit[0].ref = this.produit.ref
-                            break
-                        case 'produit_qte':
-                            return this.interventions[getId].produit[0].qte = this.produit.qte
-                            break
-                        case 'produit_libelle':
-                            return this.produit.libelle
-                            break
-                        default:
-                            return
-                    }
-                }else{
-                    //add interv
-                }
-            },
             catchModifDetails(){
 
                 let id = store.getters.getterIdInterv,
@@ -976,7 +875,6 @@
 
                 }else{
                     //add one interv
-                }
 
 
             }
