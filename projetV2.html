@@ -166,12 +166,14 @@
             }
         },
         template: `
-            <select v-model="value" @change="getSelect()">
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-            </select>
+            <div>
+                <select v-model="value" @change="getSelect()">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
+            </div>
         `,
     })
 
@@ -712,7 +714,7 @@
             <td @dblclick="editDateDebut(id)">{{date_debut}}</td>
             <td @dblclick="editDateFin(id)">{{date_fin}}</td>
             <td @dblclick="editCreateur(id)">{{createur}}</td>
-            <td><button @click="eventDetails(id)">Voir</button></td>
+            <td><button @click="eventDetails(id)" class="btn btn-secondary">Voir</button></td>
         </tr>`,
         methods:{
             editId(id){
