@@ -16,7 +16,7 @@
 <h1 class="display-4">Interventions</h1>
 <div id="root">
     <nbrintervention class="textColor"></nbrintervention>
-    <interventionlist :interventions="interventions"></interventionlist>
+    <interventionlist ref="intervList" :interventions="interventions"></interventionlist>
     <pagination></pagination>
     <editinterv ref="editInterv" :interventions="interventions"></editinterv>
 </div>
@@ -609,8 +609,26 @@ console.log('id')
             displayAddForm(){
                 store.commit('editButtonAddInterv', true)
                 vm.$refs.editInterv.initForm()
-            }
-        },
+            },                                          //premiere lettre maj
+            editThisId(id, getId){ if(getId !== null){ return this.interventions[id].id = getId } },
+            editThisType(id, getType){ if(getType !== null){ return this.interventions[id].type = getType.charAt(0).toUpperCase()+getType.substr(1).toLowerCase() } },
+            editIntervenant(id, getIntervenant){ if(getIntervenant !== null){ return this.interventions[id].intervenant = getIntervenant.charAt(0).toUpperCase()+getIntervenant.substr(1).toLowerCase() } },
+            editClient(id, getClient){
+
+                if(getClient !== null){
+
+                    let prenom = getClient.match(/^[a-z]+[ ]/g).join(", ")
+                    this.interventions[id].client[0].prenom = prenom.charAt(0).toUpperCase()+prenom.substr(1).toLowerCase()
+
+                    let nom = getClient.match(/[ ][a-z]+/g).join(", ")
+                    this.interventions[id].client[0].nom = nom.charAt(0).toUpperCase()+nom.substr(1).toLowerCase()
+                }
+            },
+            editEtat(id, getEtat){ if(getEtat !== null){ return this.interventions[id].etat = getEtat.charAt(0).toUpperCase()+getEtat.substr(1).toLowerCase() } },
+            editDateDebut(id, getDateDebut){ if(getDateDebut !== null){ return this.interventions[id].date_debut = getDateDebut } },
+            editDateFin(id, getDateFin){ if(getDateFin !== null){ return this.interventions[id].date_fin = getDateFin } },
+            editCreateur(id, getCreateur){ if(getCreateur !== null){ return this.interventions[id].createur = getCreateur.charAt(0).toUpperCase()+getCreateur.substr(1).toLowerCase() } }
+            },
         template: `
         <div>
             <div>
@@ -683,27 +701,47 @@ console.log('id')
         <tr>
             <input type="checkbox" @click="selectCheckbox(id)" v-model="checkedInterv[id]">
             <td @dblclick="editId(id)">{{id}}</td>
-            <td>{{type}}</td>
-            <td>{{intervenant}}</td>
-            <td>{{client[0].prenom}} {{client[0].nom}}</td>
-            <td>{{etat}}</td>
-            <td>{{date_debut}}</td>
-            <td>{{date_fin}}</td>
-            <td>{{createur}}</td>
+            <td @dblclick="editType(id)">{{type}}</td>
+            <td @dblclick="editIntervenant(id)">{{intervenant}}</td>
+            <td @dblclick="editClient(id)">{{client[0].prenom}} {{client[0].nom}}</td>
+            <td @dblclick="editEtat(id)">{{etat}}</td>
+            <td @dblclick="editDateDebut(id)">{{date_debut}}</td>
+            <td @dblclick="editDateFin(id)">{{date_fin}}</td>
+            <td @dblclick="editCreateur(id)">{{createur}}</td>
             <td><button @click="eventDetails(id)">Voir</button></td>
         </tr>`,
         methods:{
             editId(id){
-
-                let txt = '',
-                    getId = prompt('Entrez votre nouvelle valeur pour l')
-
-                if (getId === null || getId === '') {
-                    txt = ''
-                } else {
-
-                   this.$root.$options.methods.editIdParent(getId)
-                }
+                let getId = prompt('Entrez votre nouvelle valeur pour l\'id :')
+                if (getId !== null) {console.log('t'); vm.$refs.intervList.editThisId(id - 1, getId) }
+            },
+            editType(id){
+                let getType = prompt('Entrez votre nouvelle valeur pour le type :')
+                if (getType !== null || getType !== '') { vm.$refs.intervList.editThisType(id - 1, getType) }
+            },
+            editIntervenant(id){
+                let getIntervenant = prompt('Entrez votre nouvelle valeur pour l\'intervenant :')
+                if (getIntervenant !== null || getIntervenant !== '') { vm.$refs.intervList.editIntervenant(id - 1, getIntervenant) }
+            },
+            editClient(id){
+                let getClient = prompt('Entrez le nouveau prénom + nom du client :')
+                if (getClient !== null || getClient !== '') { vm.$refs.intervList.editClient(id - 1, getClient) } //prenom+nom
+            },
+            editEtat(id){
+                let getEtat = prompt('Entrez votre nouvelle valeur pour l\'état :')
+                if (getEtat !== null || getEtat !== '') { vm.$refs.intervList.editEtat(id - 1, getEtat) }
+            },
+            editDateDebut(id){
+                let getDateDebut = prompt('Entrez votre nouvelle valeur pour la date de début :')
+                if (getDateDebut !== null || getDateDebut !== '') { vm.$refs.intervList.editDateDebut(id - 1, getDateDebut) }
+            },
+            editDateFin(id){
+                let getDateFin = prompt('Entrez votre nouvelle valeur pour la date de fin :')
+                if (getDateFin !== null || getDateFin !== '') { vm.$refs.intervList.editDateFin(id - 1, getDateFin) }
+            },
+            editCreateur(id){
+                let getCreateur = prompt('Entrez votre nouvelle valeur pour le créateur :')
+                if (getCreateur !== null || getCreateur !== '') { vm.$refs.intervList.editCreateur(id - 1, getCreateur) }
             },
             eventDetails(id){
                 store.commit('editIdInterv', id)
@@ -1664,7 +1702,7 @@ console.log('id')
         },
         methods:{
             editIdParent(id){
-               console.log(this.interventions)
+               //console.log(this.interventions)
             }
         }
     })
