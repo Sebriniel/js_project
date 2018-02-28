@@ -25,6 +25,10 @@ input{
     border: 1px solid gray;
 }
 
+table tr{
+    width: 120px;
+}
+
 tr input{width: 150px;}
 
 #root{
