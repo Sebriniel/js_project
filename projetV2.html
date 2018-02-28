@@ -487,14 +487,15 @@
                 if(input.trim().length === 0){
                     console.log('la')
                     //store.commit('editTabSearch', this.interventions)
-                    return tabSearch
+                    return this.interventions
     //                    for(var key in this.searchInColumn) {
     //                        //this.searchByColumns(key)
     //                        //push index input not empty ?
     //                    }
                 }
 
-                this.interventions.map(function(interv){
+                if(tabResult)
+                tabSearch.map(function(interv){
 
                     if(columnNames === 'client'){
 
@@ -521,8 +522,10 @@
 
                 store.commit('editTabSearch', tabResult)
 
-                for(let i = 0; i < this.searchInColumn.length; i++){
-                    this.searchInColumn[i].length === 0 ? store.commit('editSearchColumn', false) : store.commit('editSearchColumn', true)
+                if(input.length !== 0) {
+                    store.commit('editSearchColumn', true)
+                }else{
+                    store.commit('editSearchColumn', false)
                 }
 
             },
