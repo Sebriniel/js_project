@@ -2,15 +2,44 @@ body {
     margin: 10px 0 0 10px;
 }
 
-/*#root {*/
-    /*display: flex;*/
-    /*flex-direction: row;*/
-    /*justify-content: space-around;*/
-/*}*/
-
 h1 {
     margin: 0 0 20px 0;
     text-align: center;
+}
+
+table {
+    text-align: center;
+    margin: 0 0 20px 0;
+}
+
+td {
+    padding: 0 15px;
+}
+
+h4 {
+    text-align: center;
+}
+
+input{
+    text-align: center;
+    border: 1px solid gray;
+}
+
+tr input{width: 150px;}
+
+#root{
+    max-width: 1024px;
+    margin: auto;
+}
+
+#topButton{
+    width: 90%;
+    float: right;
+}
+
+#selectNbrItem{
+    width: 43px;
+    margin-left: 6%;
 }
 
 .btn {
@@ -25,10 +54,6 @@ h1 {
     flex-direction: column;
 }
 
-#selectNbrItem{
-    width: 43px;
-}
-
 #removeFormContainer {
     margin: auto;
 }
@@ -37,20 +62,11 @@ h1 {
     margin-bottom: 30px;
 }
 
-table {
-    text-align: center;
-    margin: 0 0 20px 0;
-}
-
 #addInterv, #removeInterv{
     height: 40px;
     width: 220px;
     margin-bottom: 30px;
     align-self: center;
-}
-
-td {
-    padding: 0 15px;
 }
 
 #submit{
@@ -129,10 +145,6 @@ td {
     margin-right: 10px;
 }
 
-h4 {
-    text-align: center;
-}
-
 #coordClientDetails, #datesDetails, #refProduitDetails, #textareasDetails, #createurDetails {
     display: flex;
     flex-direction: row;
@@ -158,13 +170,6 @@ h4 {
 .textColor{
     color: #575757;
 }
-
-input{
-    text-align: center;
-    border: 1px solid gray;
-}
-
-tr input{width: 150px;}
 
 .searchError{font-style: italic;}
 
@@ -240,6 +245,14 @@ tr input{width: 150px;}
 
     table tr td:last-of-type {
         padding: 0;
+    }
+
+    #root{
+        width: 98%;
+    }
+    
+    #topButton{
+        float: none;
     }
 
     #root div:nth-of-type(2) div:first-of-type{
