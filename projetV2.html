@@ -394,32 +394,6 @@
                 let id = store.getters.getterIdInterv,
                     getId = id - 1
 
-                this.displayForm = true
-                this.type = this.interventions[getId].type
-
-                this.etat = this.interventions[getId].etat
-                this.createur = this.interventions[getId].createur
-                this.intervenant = this.interventions[getId].intervenant
-                this.description = this.interventions[getId].description
-                this.commentaires = this.interventions[getId].commentaires
-
-                this.client.nom = this.interventions[getId].client[0].nom
-                this.client.prenom = this.interventions[getId].client[0].prenom
-                this.client.adresse1 = this.interventions[getId].client[0].adresse1
-                this.client.adresse2 = this.interventions[getId].client[0].adresse2
-                this.client.cp = this.interventions[getId].client[0].cp
-                this.client.ville = this.interventions[getId].client[0].ville
-                this.client.telephone = this.interventions[getId].client[0].telephone
-                this.client.mail = this.interventions[getId].client[0].mail
-
-                this.date_debut = this.interventions[getId].date_debut
-                this.heure_debut = this.interventions[getId].heure_debut
-                this.date_fin = this.interventions[getId].date_fin
-                this.heure_fin = this.interventions[getId].heure_fin
-
-                this.produit.ref = this.interventions[getId].produit[0].ref
-                this.produit.qte = this.interventions[getId].produit[0].qte
-                this.produit.libelle = this.interventions[getId].produit[0].libelle
             },
             catchModifDetails(){
 
@@ -1104,101 +1078,11 @@
                         }
                     ]
                 }
-
             ]
         },
         methods: {
-            catchSubmit() {
-                if (this.type == "" || this.intervenant == "" || this.date_debut == "" || this.date_fin == "" || this.createur == "" || this.nom == "" || this.prenom == "" || this.adresse1 == "" || this.cp == "" || this.ville == "" || this.telephone == "") {
-                    alert('Merci de remplir tous les champs.')
-                } else {
-                    var formContainer = document.getElementById("formContainer");
-                    formContainer.classList.add("displayNone");
-                    var idLastInterv = this.interventions.length - 1;
-                    var id = this.interventions[idLastInterv].id;
-                    this.interventions.push({
-                        id: id + 1,
-                        type: this.type,
-                        intervenant: this.intervenant,
-                        etat: 'A faire',
-                        date_debut: this.date_debut,
-                        heure_debut: this.heure_debut,
-                        date_fin: this.date_fin,
-                        heure_fin: this.heure_fin,
-                        createur: this.createur,
-                        description: this.description,
-                        commentaires: this.commentaires,
-                        produit: [
-                            {
-                                ref: this.ref,
-                                qte: this.qte,
-                                libelle: this.libelle,
-                            }
-                        ],
-                        client: [
-                            {
-                                nom: this.nom,
-                                prenom: this.prenom,
-                                adresse1: this.adresse1,
-                                adresse2: this.adresse2,
-                                cp: this.cp,
-                                ville: this.ville,
-                                telephone: this.telephone,
-                                mail: this.mail
-                            }
-                        ]
-                    });
-                    alert("L'intervention a bien été ajoutée!")
-                    this.type = "";
-                    this.intervenant = "";
-                    this.date_debut = "";
-                    this.heure_debut = "";
-                    this.date_fin = "";
-                    this.heure_fin = "";
-                    this.createur = "";
-                    this.description = "";
-                    this.commentaires = "";
-                    this.ref = "";
-                    this.qte = "";
-                    this.libelle = "";
-                    this.nom = "";
-                    this.prenom = "";
-                    this.adresse1 = "";
-                    this.adresse2 = "";
-                    this.cp = "";
-                    this.ville = "";
-                    this.telephone = "";
-                    this.mail = "";
-                }
-            },
-            catchRemove() {
-                if (this.idInterv != "") {
-                    var removeFormContainer = document.getElementById("removeFormContainer");
-                    removeFormContainer.classList.add("displayNone");
-                    var idInterv = this.idInterv;
-                    if (window.confirm("Êtes vous sûr de vouloir supprimer l'intervention " + idInterv + " ?")) {
-                        if (this.idInterv > 0 && this.idInterv <= this.interventions.length) {
-                            for (i = 0; i < this.interventions.length; i++) {
-                                if (this.interventions[i].id == idInterv) {
-                                    if (this.interventions.splice(i, 1)) {
-                                        alert("L'intervention a bien été supprimée");
-                                    } else {
-                                        alert("Une erreur s'est produite, veuillez réessayer");
-                                    }
-                                }
-                            }
-                        } else {
-                            alert("Merci de choisir un numéro d'intervention existant!")
-                        }
-                    }
-                } else {
-                    alert('Merci de remplir les champs requis!')
-                }
         }
     })
-
-
-
 
 
 </script>
