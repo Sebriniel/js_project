@@ -85,3 +85,37 @@ td {
     color: white !important;
 }
 
+.editInterv, .deleteInterv, .editForm{
+    display: block;
+}
+
+.textColor{color: #575757;}
+
+input{
+    text-align: center;
+    border: 1px solid gray;
+}
+
+tr input{width: 150px;}
+
+.searchError{font-style: italic;}
+
+.arrow{
+    display: inline-block;
+    vertical-align: middle;
+    width: 0;
+    height: 0;
+    margin-left: 5px;
+}
+
+.orderAsc{
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid blue;
+}
+
+.orderDsc{
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid blue;
+}
