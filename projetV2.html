@@ -16,7 +16,6 @@
 <h1 class="display-4">Interventions</h1>
 <div id="root">
     <nbrintervention class="textColor"></nbrintervention>
-    <interventionlist :interventions="interventions"></interventionlist>
     <pagination></pagination>
     <editinterv ref="editInterv" :interventions="interventions"></editinterv>
 </div>
@@ -166,14 +165,6 @@
             }
         },
         template: `
-            <div>
-                <select v-model="value" @change="getSelect()">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                </select>
-            </div>
         `,
     })
 
@@ -485,15 +476,12 @@
                     tabResult = []
 
                 if(input.trim().length === 0){
-                    store.commit('editTabSearch', this.interventions)
-                    return tabSearch = this.interventions
     //                    for(var key in this.searchInColumn) {
     //                        //this.searchByColumns(key)
     //                        //push index input not empty ?
     //                    }
                 }
 
-                tabSearch.map(function(interv){
 
                     if(columnNames === 'client'){
 
@@ -504,7 +492,6 @@
                         search !== -1 ? tabResult.push(interv) : ''
 
                     }else if(columnNames === 'id'){
-console.log('id')
                         if (interv[columnNames] === parseInt(input)){
                             tabResult.push(interv)
                         }
@@ -521,7 +508,6 @@ console.log('id')
                 store.commit('editTabSearch', tabResult)
 
                 for(let i = 0; i < this.searchInColumn.length; i++){
-                    this.searchInColumn[i] === "" ? store.commit('editSearchColumn', false) : store.commit('editSearchColumn', true)
                 }
 
             },
@@ -611,8 +597,6 @@ console.log('id')
             displayAddForm(){
                 store.commit('editButtonAddInterv', true)
                 vm.$refs.editInterv.initForm()
-            }
-        },
         template: `
         <div>
             <div>
@@ -685,27 +669,9 @@ console.log('id')
         <tr>
             <input type="checkbox" @click="selectCheckbox(id)" v-model="checkedInterv[id]">
             <td @dblclick="editId(id)">{{id}}</td>
-            <td>{{type}}</td>
-            <td>{{intervenant}}</td>
-            <td>{{client[0].prenom}} {{client[0].nom}}</td>
-            <td>{{etat}}</td>
-            <td>{{date_debut}}</td>
-            <td>{{date_fin}}</td>
-            <td>{{createur}}</td>
-            <td><button @click="eventDetails(id)" class="btn btn-secondary">Voir</button></td>
         </tr>`,
         methods:{
             editId(id){
-
-                let txt = '',
-                    getId = prompt('Entrez votre nouvelle valeur pour l')
-
-                if (getId === null || getId === '') {
-                    txt = ''
-                } else {
-
-                   this.$root.$options.methods.editIdParent(getId)
-                }
             },
             eventDetails(id){
                 store.commit('editIdInterv', id)
@@ -1663,11 +1629,6 @@ console.log('id')
         },
         mounted(){
             store.commit('editTabSearch', this.interventions)
-        },
-        methods:{
-            editIdParent(id){
-               console.log(this.interventions)
-            }
         }
     })
 
