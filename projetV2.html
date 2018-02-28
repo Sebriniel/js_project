@@ -39,6 +39,12 @@
             next: false,
             index: 0,
             idInterv: 0,
+            tabSearch: [],
+            searchColumn: false,
+            stockDeleteId: [],
+            confirmDeleteInterv: false,
+            idInterv: 0,
+            boolEditInterv: false
         },
         getters: {
             getterSelect: state => {
@@ -68,6 +74,24 @@
             getterIdInterv: state => {
                 return state.idInterv
             },
+            getterTabSearch: state => {
+                return state.tabSearch
+            },
+            getterSearchColumn: state => {
+                return state.searchColumn
+            },
+            getterStockDeleteId: state => {
+                return state.stockDeleteId
+            },
+            getterDisplayDelete: state => {
+                return state.confirmDeleteInterv
+            },
+            getterIdInterv: state => {
+                return state.idInterv
+            },
+            getterBoolEditInterv: state => {
+                return state.boolEditInterv
+            }
         },
         mutations: {
             editSelect: (state, newValue) => {
@@ -96,6 +120,24 @@
             },
             editIdInterv: (state, newValue) => {
                 state.idInterv = newValue
+            },
+            editTabSearch: (state, newValue) => {
+                state.tabSearch = newValue
+            },
+            editSearchColumn: (state, newValue) => {
+                state.searchColumn = newValue
+            },
+            editStockDeleteId: (state, newValue) => {
+                state.stockDeleteId = newValue
+            },
+            editDisplayDelete: (state, newValue) => {
+                state.confirmDeleteInterv = newValue
+            },
+            editIdInterv: (state, newValue) => {
+                state.idInterv = newValue
+            },
+            editBoolEditInterv: (state, newValue) => {
+                state.boolEditInterv = newValue
             }
         }
     })
@@ -242,6 +284,37 @@
         data() {
             return {
                 curPage: 1,
+                filters: false,
+                searchInTab: '',
+                searchErrorMsg: false,
+                activeOrder: 0,
+                searchInputsNames: [
+                    'Numéro',
+                    'Type',
+                    'Intervenant',
+                    'Client',
+                    'Etat',
+                    'Date Début',
+                    'Date Fin',
+                    'Créateur'
+                ],
+                searchInColumn: [],
+                boolArrow: [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                confirmDeleteInterventions: false,
+                clickDelete: false,
+                deleteIdInterv: '',
+                displayDeleteInterv: false,
+                count: 0,
+                displayButtonAddInterv: true
             }
         },
         props: [
@@ -250,32 +323,316 @@
         computed: {
             filterBy() {
                 let totalInterventions = this.interventions.length,
+                    getCurPage = store.getters.getterCurrentPage,
                     selectVal = store.getters.getterSelect,
                     startSlice = store.getters.getterStartSlice,
+                    boolChangePage = store.getters.getterChangePage,
+                    index = store.getters.getterIndex,
                     prev = store.getters.getterPrev,
+                    next = store.getters.getterNext,
+                    tabSearch = store.getters.getterTabSearch,
+                    searchColumn = store.getters.getterSearchColumn,
+                    deleteIntervId = store.getters.getterStockDeleteId,
+                    confirmDisplayButton = store.getters.getterDisplayDelete
+
+
+                //recherche global non vide et recherche par colonne non vide ? + pagination.
 
                 getCurPage === 1 ? this.curPage = 1 : ''
                 selectVal === 0 ? selectVal = 10 : 0
                 store.commit('sendTotalPages', totalInterventions)
 
+                //display confirm button 'delete interv'
+                confirmDisplayButton === true ? this.confirmDeleteInterventions = true : this.confirmDeleteInterventions = false
+
+                if(deleteIntervId.length !== 0 && this.clickDelete === true) {
+                    for(let i = 0; i < deleteIntervId.length; i++){
+                        for(let y = 0; y < this.interventions.length; y++){
+                            if(deleteIntervId[i] === this.interventions[y].id){
+                                this.interventions.splice(y, 1)
+                            }
+                        }
+                    }
+                    this.clickDelete = false
+                    this.confirmDeleteInterventions = false
+                    store.commit('editDisplayDelete', false)
+                    store.commit('editStockDeleteId', [])
+                    store.commit('editIndex', 0)
+                    store.commit('editCurrentPage', 1)
+                }
 
 
+                if(searchColumn === true){
 
+                    return tabSearch.slice(0, selectVal)
+
+                }
+                if (this.searchInTab === 0 || !this.searchInTab) { //global search empty -> classic tab
+
+                    this.searchErrorMsg = false
+
+                    if (boolChangePage === true) { //select page ? => true
+                        if (next === true) { // next page
+
+                            startTab = index * selectVal
+                            store.commit('editNext', false)
+
+                            return this.interventions.slice(startTab, (startTab + selectVal))
+                        } else if (prev === true) { // prev page
+
+                            startTab = getCurPage * selectVal
+                            store.commit('editPrev', false)
+
+                            return this.interventions.slice((startTab - selectVal), startTab)
+                        } else {
+                            startTab = getCurPage * selectVal
+
+                            return this.interventions.slice(startTab, (startTab + selectVal))
+                        }
+                    } else { //select page ? => false => classic pagination => nextPage++ / prevPage--
+                        if (getCurPage > this.curPage) {  // next page
+
+                            startSlice += selectVal
+                            store.commit('editStartSlice', startSlice)
+                            this.curPage = getCurPage
+
+                            return this.interventions.slice(startSlice, (startSlice + selectVal))
+                        } else if (getCurPage < this.curPage) { // prev page
+
+                            startSlice -= selectVal
+                            store.commit('editStartSlice', startSlice)
+                            this.curPage = getCurPage
+
+                            return this.interventions.slice(startSlice, startSlice + selectVal)
+                        }else if(getCurPage === this.curPage && getCurPage !== 1){
+
+                            startTab = (getCurPage - 1) * selectVal
+
+                            return this.interventions.slice(startTab, (startTab + selectVal))
+                        }else { // init tab => slice(0,10)
+                            store.commit('editStartSlice', 0)
+                            return this.interventions.slice(0, selectVal)
+                        }
+                    }
+                }else {
+                    let tabSearchInterv = []
+
+                    //recherche global à faire
+                    //console.log(this.searchInTab)
+                    //fonctionne que pour intervention ici
+                    for(let i = 0; i < this.interventions.length; i++){
+
+                        let search = this.interventions[i].intervenant.toLowerCase().indexOf(this.searchInTab)
+
+                        if(search !== -1){
+
+                            search = this.interventions[i].intervenant.toLowerCase().indexOf(this.searchInTab, search + 1)
+
+                            tabSearchInterv.push(this.interventions[i])
+                        }
+                    }
+                    tabSearchInterv.length === 0 ? this.searchErrorMsg = true : this.searchErrorMsg = false
+
+                    return tabSearchInterv.slice(0, selectVal)
+                }
+            },
+        },
+        methods:{
+            displayFilters(){
+                return this.filters = true
+            },
+            returnColumnNames(index) {
+
+                let columnNames = ''
+
+                switch(index){
+                    case 0: columnNames = 'id'
+                        break
+                    case 1: columnNames = 'type'
+                        break
+                    case 2: columnNames = 'intervenant'
+                        break
+                    case 3: columnNames = 'client'
+                        break
+                    case 4: columnNames = 'etat'
+                        break
+                    case 5: columnNames = 'date_debut'
+                        break
+                    case 6: columnNames = 'date_fin'
+                        break
+                    case 7: columnNames = 'createur'
+                        break
+                    default: columnNames = 'id'
+                }
+
+                return columnNames
+            },
+            searchByColumns(index){
+
+
+                let input = this.searchInColumn[index],
+                    columnNames = this.returnColumnNames(index),
+                    tabSearch = store.getters.getterTabSearch,
+                    tabResult = []
+
+
+                if(input.trim().length === 0){
+                    tabSearch = this.interventions
+                    for(var key in this.searchInColumn) {
+                        //this.searchByColumns(key)
+                        //push index input not empty ?
+                    }
+                }
+
+                tabSearch.map(function(a){
+
+                    if(columnNames === 'client'){
+
+                        let prenom =  a[columnNames][0].prenom.toLowerCase() + ' ' +  a[columnNames][0].nom.toLowerCase()
+
+                        var search = prenom.indexOf(input)
+
+                        search !== -1 ? tabResult.push(a) : ''
+
+                    }else if(columnNames === 'id'){
+
+                        if (a[columnNames] === parseInt(input)){
+                            tabResult.push(a)
+                        }
+                    }else{
+
+                        var search = a[columnNames].toLowerCase().indexOf(input)
+
+                        search !== -1 ? tabResult.push(a) : ''
+                    }
+                })
+
+                tabResult.length === 0 ? this.searchErrorMsg = true : this.searchErrorMsg = false
+
+                store.commit('editTabSearch', tabResult)
+
+                for(let i = 0; i < this.searchInColumn.length; i++){
+                    this.searchInColumn[i] === "" ? store.commit('editSearchColumn', false) : store.commit('editSearchColumn', true)
+                }
+
+            },
+            orderByColumn(index){ //index columns
+
+                let columnNames = this.returnColumnNames(index)
+
+                this.boolArrow[index] = !this.boolArrow[index]
+
+                let bool = this.boolArrow[index]
+
+
+                this.interventions.sort(function(a, b){
+
+                    if(columnNames === 'date_debut' || columnNames === 'date_fin') {
+
+                        let dateA = moment(a[columnNames], "DD-MM-YYYY").format("YYYY-MM-DD"),
+                            dateB = moment(b[columnNames], "DD-MM-YYYY").format("YYYY-MM-DD")
+
+                        if(bool === true){
+                            return new Date(dateA) - new Date(dateB)
+                        }else{
+                            return new Date(dateB) - new Date(dateA)
+                        }
 
                     }else{
 
+                        if(columnNames === 'client'){
+                            var nameA = a['client'][0].nom,
+                                nameB = b['client'][0].nom
+                        }else{
+                            var nameA = a[columnNames],
+                                nameB = b[columnNames]
+                        }
+
+                        if(bool === true){
+                            if (nameA < nameB)
+                                return -1
+                            if (nameA > nameB)
+                                return 1
+                            return 0
+                        }else{
+                            if (nameA < nameB)
+                                return 1
+                            if (nameA > nameB)
+                                return -1
+                            return 0
+                        }
                     }
+                })
+            },
+            confirmDeleteInterv(){
+                return this.clickDelete = true
+            },
+            catchRemove(){
 
+                this.displayDeleteInterv = true
+                this.count++
 
+                if(this.count === 2){
+                    let idInterv = this.deleteIdInterv
 
+                    if(idInterv !== ""){
 
+                        if (window.confirm("Êtes vous sûr de vouloir supprimer l'intervention " + idInterv + " ?")){
+                            if (idInterv > 0 && (idInterv <= this.interventions.length)){
+                                for(let i = 0; i < this.interventions.length; i++){
+                                    if (this.interventions[i].id === parseInt(idInterv)){
+                                        if(this.interventions.splice(i, 1)){
+                                            alert("L'intervention a bien été supprimée")
+                                        }else {
+                                            alert("Une erreur s'est produite, veuillez réessayer")
+                                        }
+                                    }
+                                }
+                            }else {
+                                alert("Merci de choisir un numéro d'intervention existant!")
+                            }
+                        }
+                    }else {
+                        alert('Merci de remplir les champs requis!')
                     }
+                    this.count = 0
+                    this.displayDeleteInterv = false
                 }
+            },
+            displayAddForm(){
+                this.displayButtonAddInterv =  false
+                vm.$refs.editInterv.initForm()
             }
         },
         template: `
         <table>
+            <input type="text" placeholder="search" v-model="searchInTab">
+            <div>
+                <button @click="displayFilters()" class="btn btn-secondary">Filtres</button>
+            </div>
+            <div>
+                <input type="text"
+                placeholder="Numéro de l'intervention"
+                v-model="deleteIdInterv"
+                :class="[displayDeleteInterv ? '' : 'displayNone']">
+                <input type="submit" class="btn btn-secondary" value="Supprimer une intervention" @click="catchRemove()">
+            </div>
+            <div>
+                <button @click="displayAddForm()" :class="['btn btn-secondary', displayButtonAddInterv ? '' : 'displayNone']">Ajouter une intervention</button>
+            </div>
             <tr>
+            <th>Suppression</th>
+                <th :class="[filters ? 'displayNone' : '']" v-for="columnName, index in searchInputsNames">{{columnName}}
+                    <span @click="orderByColumn(index)" :class="['arrow', boolArrow[index] ? 'orderAsc' : 'orderDsc']"></span>
+                </th>
+                <th :class="[filters ? '' : 'displayNone']" v-for="(columnName, index) in searchInputsNames">
+                    <input
+                    type="text"
+                    :ref="returnColumnNames(index)"
+                    v-on:input="searchByColumns(index)"
+                    :placeholder="columnName"
+                    v-model="searchInColumn[index]"/>
+                </th>
             </tr>
 
             <intervention v-for="(interv, index) in filterBy"
@@ -287,7 +644,11 @@
              :date_debut="interv.date_debut"
              :date_fin="interv.date_fin"
              :createur="interv.createur"
+             :key="index">
             </intervention>
+            <p :class="[searchErrorMsg ? 'searchError' : 'displayNone']">Aucun résultat pour votre recherche</p>
+            <button @click="confirmDeleteInterv()" :class="['btn btn-secondary', confirmDeleteInterventions ? 'deleteInterv' : 'displayNone']">Supprimer les interventions</button>
+
         </table>`,
     })
 
@@ -302,8 +663,15 @@
             'date_fin',
             'createur'
         ],
+        data() {
+            return {
+                checkedInterv: [],
+            }
+        },
         template: `
         <tr>
+            <input type="checkbox" @click="selectCheckbox(id)" v-model="checkedInterv[id]">
+            <td>{{id}}</td>
             <td>{{type}}</td>
             <td>{{intervenant}}</td>
             <td>{{client[0].prenom}} {{client[0].nom}}</td>
@@ -316,7 +684,24 @@
         methods:{
             eventDetails(id){
                 store.commit('editIdInterv', id)
+                store.commit('editBoolEditInterv', true)
                 vm.$refs.editInterv.initForm()
+            },
+            selectCheckbox(id){
+
+                let stockId = store.getters.getterStockDeleteId
+
+                if(stockId.includes(id)){
+                    let index = stockId.indexOf(id)
+                    if(index > -1){
+                        stockId.splice(index, 1)
+                    }
+                }else{
+                    stockId.push(id)
+                }
+
+                store.commit('editStockDeleteId', stockId)
+                stockId.length !== 0 ? store.commit('editDisplayDelete', true) : store.commit('editDisplayDelete', false)
             }
         }
     })
@@ -360,29 +745,53 @@
         <form action="" method="post" :class="[displayForm ? 'editForm' : 'displayNone']" @submit.prevent="catchModifDetails">
                 <h4>Informations principales</h4>
                 <div id="intervInfoDetails">
+                    <select name="type" v-on:input="edit('type')" v-model="type">
                         <option>Maintenance</option>
                         <option>Installation</option>
                         <option>Désinstallation</option>
+                    </select>
+                    <input type="text" v-on:input="edit('intervenant')" v-model="intervenant"/>
+                    <select name="type" v-on:input="edit('etat')" v-model="etat">
+                        <option>En cours</option>
+                        <option>Terminé</option>
                     </select>
                 </div>
 
                 <h4>Client</h4>
                 <div id="coordClientDetails">
+                    <input type="text" v-on:input="edit('client_nom')" v-model="client.nom" />
+                    <input type="text" v-on:input="edit('client_prenom')" v-model="client.prenom" />
+                    <input type="text" v-on:input="edit('client_adresse1')" v-model="client.adresse1" />
+                    <input type="text" v-on:input="edit('client_adresse2')" v-model="client.adresse2"/>
+                    <input type="text" v-on:input="edit('client_cp')" v-model="client.cp" />
+                    <input type="text" v-on:input="edit('client_ville')" v-model="client.ville" />
+                    <input type="text" v-on:input="edit('client_telephone')" v-model="client.telephone" />
+                    <input type="text" v-on:input="edit('client_mail')" v-model="client.mail"/>
                 </div>
 
                 <h4>Dates et heures</h4>
                 <div id="datesDetails">
+                    <input type="text" v-on:input="edit('date_debut')" v-model="date_debut"/>
+                    <input type="text" v-on:input="edit('heure_debut')" v-model="heure_debut"/>
+                    <input type="text" v-on:input="edit('date_fin')" v-model="date_fin" />
+                    <input type="text" v-on:input="edit('heure_fin')" v-model="heure_fin"/>
                 </div>
 
                 <div>
+                    <input type="text" v-on:input="edit('createur')" v-model="createur" />{{id}}
                 </div>
 
                 <h4>Produit</h4>
                 <div id="refProduitDetails">
+                    <input type="text" v-on:input="edit('produit_ref')" v-model="produit.ref"/>
+                    <input type="text" v-on:input="edit('produit_qte')" v-model="produit.qte"/>
+                    <input type="text" v-on:input="edit('produit_libelle')" v-model="produit.libelle"/>
                 </div>
 
                 <h4>Descriptions et commentaires</h4>
                 <div id="textareasDetails">
+                    <textarea name="description" v-on:input="edit('description')" cols="30" rows="10" v-model="description"></textarea>
+                    <textarea name="commentaires" v-on:input="edit('commentaires')" cols="30" rows="10" v-model="commentaires"></textarea>
                 </div>
 
                 <input type="submit" class="btn btn-secondary" id="enregDetailsBtn" value="Enregistrer"/>
@@ -392,22 +801,184 @@
         methods: {
             initForm(){
                 let id = store.getters.getterIdInterv,
+                    boolEditInterv = store.getters.getterBoolEditInterv,
                     getId = id - 1
 
+                //commmit booleditinterv = false
+                if(boolEditInterv === true){
+
+                    this.displayForm = true
+
+                    this.type = this.interventions[getId].type
+                    this.etat = this.interventions[getId].etat
+                    this.createur = this.interventions[getId].createur
+                    this.intervenant = this.interventions[getId].intervenant
+                    this.description = this.interventions[getId].description
+                    this.commentaires = this.interventions[getId].commentaires
+                    this.date_debut = this.interventions[getId].date_debut
+                    this.heure_debut = this.interventions[getId].heure_debut
+                    this.date_fin = this.interventions[getId].date_fin
+                    this.heure_fin = this.interventions[getId].heure_fin
+
+                    this.client.nom = this.interventions[getId].client[0].nom
+                    this.client.prenom = this.interventions[getId].client[0].prenom
+                    this.client.adresse1 = this.interventions[getId].client[0].adresse1
+                    this.client.adresse2 = this.interventions[getId].client[0].adresse2
+                    this.client.cp = this.interventions[getId].client[0].cp
+                    this.client.ville = this.interventions[getId].client[0].ville
+                    this.client.telephone = this.interventions[getId].client[0].telephone
+                    this.client.mail = this.interventions[getId].client[0].mail
+
+                    this.produit.ref = this.interventions[getId].produit[0].ref
+                    this.produit.qte = this.interventions[getId].produit[0].qte
+                    this.produit.libelle = this.interventions[getId].produit[0].libelle
+
+                }else{
+
+                    this.displayForm = true
+
+                    this.type = ''
+                    this.etat = ''
+                    this.createur = ''
+                    this.intervenant = ''
+                    this.description = ''
+                    this.commentaires = ''
+                    this.date_debut = ''
+                    this.heure_debut = ''
+                    this.date_fin = ''
+                    this.heure_fin = ''
+
+                    this.client.nom = ''
+                    this.client.prenom = ''
+                    this.client.adresse1 = ''
+                    this.client.adresse2 = ''
+                    this.client.cp = ''
+                    this.client.ville = ''
+                    this.client.telephone = ''
+                    this.client.mail = ''
+
+                    this.produit.ref = ''
+                    this.produit.qte = ''
+                    this.produit.libelle = ''
+                }
+            },
+            edit(model){
+
+                let id = store.getters.getterIdInterv,
+                    boolEditInterv = store.getters.getterBoolEditInterv,
+                    getId = id - 1
+
+                if(boolEditInterv === true) {
+                //edit interv
+                    switch (model) {
+                        case 'intervenant':
+                            return this.intervenant
+                            break
+                        case 'createur':
+                            return this.createur
+                            break
+                        case 'type':
+                            return this.type
+                            break
+                        case 'etat':
+                            return this.etat
+                            break
+                        case 'description':
+                            return this.description
+                            break
+                        case 'commentaires':
+                            return this.commentaires
+                            break
+                        case 'client_nom':
+                            return this.interventions[getId].client[0].nom = this.client.nom
+                            break
+                        case 'client_prenom':
+                            return this.interventions[getId].client[0].prenom = this.client.prenom
+                            break
+                        case 'client_adresse1':
+                            return this.interventions[getId].client[0].adresse1 = this.client.adresse1
+                            break
+                        case 'client_adresse2':
+                            return this.interventions[getId].client[0].adresse2 = this.client.adresse2
+                            break
+                        case 'client_cp':
+                            return this.interventions[getId].client[0].cp = this.client.cp
+                            break
+                        case 'client_ville':
+                            return this.interventions[getId].client[0].ville = this.client.ville
+                            break
+                        case 'client_telephone':
+                            return this.interventions[getId].client[0].telephone = this.client.telephone
+                            break
+                        case 'client_mail':
+                            return this.interventions[getId].client[0].mail = this.client.mail
+                            break
+                        case 'date_debut':
+                            return this.date_debut
+                            break
+                        case 'heure_debut':
+                            return this.heure_debut
+                            break
+                        case 'date_fin':
+                            return this.date_fin
+                            break
+                        case 'heure_fin':
+                            return this.heure_fin
+                            break
+                        case 'produit_ref':
+                            return this.interventions[getId].produit[0].ref = this.produit.ref
+                            break
+                        case 'produit_qte':
+                            return this.interventions[getId].produit[0].qte = this.produit.qte
+                            break
+                        case 'produit_libelle':
+                            return this.produit.libelle
+                            break
+                        default:
+                            return
+                    }
+                }else{
+                    //add interv
+                }
             },
             catchModifDetails(){
 
                 let id = store.getters.getterIdInterv,
+                    boolEditInterv = store.getters.getterBoolEditInterv,
                     getId = id - 1
 
                 this.displayForm = false
 
-                return this.interventions[getId].createur =  this.createur,
-                    this.interventions[getId].intervenant = this.intervenant,
-                    this.interventions[getId].type = this.type,
-                    this.interventions[getId].etat = this.etat,
-                    this.interventions[getId].description = this.description,
+                if(boolEditInterv === true){
+                //save edit interv
+                    this.interventions[getId].createur =  this.createur
+                    this.interventions[getId].intervenant = this.intervenant
+                    this.interventions[getId].type = this.type
+                    this.interventions[getId].etat = this.etat
+                    this.interventions[getId].description = this.description
                     this.interventions[getId].commentaires = this.commentaires
+                    this.interventions[getId].client[0].nom = this.client.nom
+                    this.interventions[getId].client[0].prenom = this.client.prenom
+                    this.interventions[getId].client[0].adresse1 = this.client.adresse1
+                    this.interventions[getId].client[0].adresse2 = this.client.adresse2
+                    this.interventions[getId].client[0].cp = this.client.cp
+                    this.interventions[getId].client[0].ville = this.client.ville
+                    this.interventions[getId].client[0].telephone = this.client.telephone
+                    this.interventions[getId].client[0].mail =    this.client.mail
+                    this.interventions[getId].client[0].cp = this.client.cp
+                    this.interventions[getId].date_debut = this.date_debut
+                    this.interventions[getId].heure_debut = this.heure_debut
+                    this.interventions[getId].date_fin = this.date_fin
+                    this.interventions[getId].heure_fin = this.heure_fin
+                    this.interventions[getId].produit[0].ref = this.produit.ref
+                    this.interventions[getId].produit[0].qte = this.produit.qte
+                    this.interventions[getId].produit[0].libelle = this.produit.libelle
+
+                }else{
+                    //add one interv
+                }
+
+
             }
         }
     })
@@ -1081,6 +1652,10 @@
             ]
         },
         methods: {
+
+        },
+        mounted(){
+            store.commit('editTabSearch', this.interventions)
         }
     })
 
