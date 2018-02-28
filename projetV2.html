@@ -483,15 +483,16 @@
                     tabResult = []
 
                 if(input.trim().length === 0){
-                    store.commit('editTabSearch', this.interventions)
-                    return tabSearch = this.interventions
+                    console.log('la')
+                    //store.commit('editTabSearch', this.interventions)
+                    return tabSearch
     //                    for(var key in this.searchInColumn) {
     //                        //this.searchByColumns(key)
     //                        //push index input not empty ?
     //                    }
                 }
 
-                tabSearch.map(function(interv){
+                this.interventions.map(function(interv){
 
                     if(columnNames === 'client'){
 
@@ -502,7 +503,7 @@
                         search !== -1 ? tabResult.push(interv) : ''
 
                     }else if(columnNames === 'id'){
-console.log('id')
+
                         if (interv[columnNames] === parseInt(input)){
                             tabResult.push(interv)
                         }
@@ -519,7 +520,7 @@ console.log('id')
                 store.commit('editTabSearch', tabResult)
 
                 for(let i = 0; i < this.searchInColumn.length; i++){
-                    this.searchInColumn[i] === "" ? store.commit('editSearchColumn', false) : store.commit('editSearchColumn', true)
+                    this.searchInColumn[i].length === 0 ? store.commit('editSearchColumn', false) : store.commit('editSearchColumn', true)
                 }
 
             },
@@ -1699,11 +1700,6 @@ console.log('id')
         },
         mounted(){
             store.commit('editTabSearch', this.interventions)
-        },
-        methods:{
-            editIdParent(id){
-               //console.log(this.interventions)
-            }
         }
     })
 
