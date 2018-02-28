@@ -27,6 +27,7 @@
 <script src="moment.js"></script>
 <script>
 
+    Vue.use(Vuex)
 
     const store = new Vuex.Store({
         state: {
@@ -44,7 +45,8 @@
             stockDeleteId: [],
             confirmDeleteInterv: false,
             idInterv: 0,
-            boolEditInterv: false
+            boolEditInterv: false,
+            buttonAddInterv: false
         },
         getters: {
             getterSelect: state => {
@@ -91,6 +93,9 @@
             },
             getterBoolEditInterv: state => {
                 return state.boolEditInterv
+            },
+            getterButtonAddInterv: state => {
+                return state.buttonAddInterv
             }
         },
         mutations: {
@@ -138,6 +143,9 @@
             },
             editBoolEditInterv: (state, newValue) => {
                 state.boolEditInterv = newValue
+            },
+            editButtonAddInterv: (state, newValue) => {
+                state.buttonAddInterv = newValue
             }
         }
     })
@@ -478,6 +486,10 @@
 
                 if(input.trim().length === 0){
                     tabSearch = this.interventions
+    //                    for(var key in this.searchInColumn) {
+    //                        //this.searchByColumns(key)
+    //                        //push index input not empty ?
+    //                    }
                 }
 
                 tabSearch.map(function(a){
@@ -596,7 +608,7 @@
                 }
             },
             displayAddForm(){
-                this.displayButtonAddInterv =  false
+                store.commit('editButtonAddInterv', true)
                 vm.$refs.editInterv.initForm()
             }
         },
@@ -739,15 +751,65 @@
         },
         template: `
         <form action="" method="post" :class="[displayForm ? 'editForm' : 'displayNone']" @submit.prevent="catchModifDetails">
+                <div id="blockPrincipale">
+                    <h4>Informations principales</h4>
+                    <div id="intervInfoDetails">
+                        <select name="type" v-model="type">
+                            <option>Maintenance</option>
+                            <option>Installation</option>
+                            <option>Désinstallation</option>
+                        </select>
+                        <input type="text" v-model="intervenant"/>
+                        <select name="type" v-model="etat">
+                            <option>En cours</option>
+                            <option>Terminé</option>
+                        </select>
+                    </div>
                 </div>
 
+                <div id="blockClient">
+                    <h4>Client</h4>
+                    <div id="coordClientDetails">
+                        <input type="text" v-model="client.nom" />
+                        <input type="text" v-model="client.prenom" />
+                        <input type="text" v-model="client.adresse1" />
+                        <input type="text" v-model="client.adresse2"/>
+                        <input type="text" v-model="client.cp" />
+                        <input type="text" v-model="client.ville" />
+                        <input type="text" v-model="client.telephone" />
+                        <input type="text" v-model="client.mail"/>
+                    </div>
+               </div>
+
+                <div id="blockDateHeure">
+                    <h4>Dates et heures</h4>
+                    <div id="datesDetails">
+                        <input type="text" v-model="date_debut"/>
+                        <input type="text" v-model="heure_debut"/>
+                        <input type="text" v-model="date_fin" />
+                        <input type="text" v-model="heure_fin"/>
+                    </div>
                 </div>
 
+                <div id="createur">
                     <input type="text" v-model="createur" />{{id}}
                 </div>
 
+                <div id="blockProduit">
+                    <h4>Produit</h4>
+                    <div id="refProduitDetails">
+                        <input type="text" v-model="produit.ref"/>
+                        <input type="text" v-model="produit.qte"/>
+                        <input type="text" v-model="produit.libelle"/>
+                    </div>
                 </div>
 
+                <div id="blockCommentDescript">
+                    <h4>Descriptions et commentaires</h4>
+                    <div id="textareasDetails">
+                        <textarea name="description" cols="30" rows="10" v-model="description"></textarea>
+                        <textarea name="commentaires" cols="30" rows="10" v-model="commentaires"></textarea>
+                    </div>
                 </div>
 
                 <input type="submit" class="btn btn-secondary" id="enregDetailsBtn" value="Enregistrer"/>
@@ -859,9 +921,56 @@
                 store.commit('editBoolEditInterv', false)
             },
             catchSubmit(){
+                if (this.type === '' || this.intervenant === ''
+                    || this.date_debut === '' || this.date_fin === '' ||
+                    this.createur === '' || this.client.nom === '' ||
+                    this.client.prenom === '' || this.client.adresse1 === '' ||
+                    this.client.cp === '' || this.client.ville === '' || this.client.telephone === ''){
+
                     alert('Merci de remplir tous les champs.')
+                    this.displayForm = true
                 }else{
+
+                    let idLastInterv = this.interventions.length - 1,
+                        id = this.interventions[idLastInterv].id
+
+                    this.interventions.push(
+                        {
+                            id: id+1,
+                            type: this.type,
+                            intervenant: this.intervenant,
+                            etat: 'A faire',
+                            date_debut: this.date_debut,
+                            heure_debut: this.heure_debut,
+                            date_fin: this.date_fin,
+                            heure_fin: this.heure_fin,
+                            createur: this.createur,
+                            description: this.description,
+                            commentaires: this.commentaires,
+                            produit: [
+                                {
+                                    ref: this.ref,
+                                    qte: this.qte,
+                                    libelle: this.libelle,
+                                }
+                            ],
+                            client: [
+                                {
+                                    nom: this.nom,
+                                    prenom: this.prenom,
+                                    adresse1: this.adresse1,
+                                    adresse2: this.adresse2,
+                                    cp: this.cp,
+                                    ville: this.ville,
+                                    telephone: this.telephone,
+                                    mail: this.mail
+                                }
+                            ]
+                        }
+                    )
                     alert("L'intervention a bien été ajoutée!")
+                    this.displayForm = false
+                    store.commit('editButtonAddInterv', false)
                 }
             }
         }
