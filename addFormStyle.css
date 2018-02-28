@@ -25,6 +25,10 @@ h1 {
     flex-direction: column;
 }
 
+#selectNbrItem{
+    width: 43px;
+}
+
 #removeFormContainer {
     margin: auto;
 }
