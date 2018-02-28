@@ -203,11 +203,11 @@
                     this.nbrPagination = Math.ceil(totalInterv / itemsPerPage)
                 }
 
-                    totalInterv = store.getters.getterTotalInterv
+                //totalInterv = store.getters.getterTotalInterv
 
-                itemsPerPage === 0 ? itemsPerPage = 10 : itemsPerPage
+                //itemsPerPage === 0 ? itemsPerPage = 10 : itemsPerPage
 
-                this.nbrPagination = Math.ceil(totalInterv / itemsPerPage)
+                //this.nbrPagination = Math.ceil(totalInterv / itemsPerPage)
                 this.myCurrentPage = 1
 
                 return this.nbrPagination
@@ -279,12 +279,12 @@
         },
         template: `
         <div id="pagination" v-if="displayPagination()">
-            <a href="#" @click="prev()">&laquo;</a>
+            <a @click="prev()">&laquo;</a>
                 <span v-for="(pageNumber, index) in nbrPages">
                     <a v-if="index === (myCurrentPage - 1)" class="active">{{pageNumber}}</a>
                     <a v-else @click="goTo(index)">{{pageNumber}}</a>
                 </span>
-            <a href="#" @click="next()">&raquo;</a>
+            <a @click="next()">&raquo;</a>
         </div>
         `,
     })
@@ -324,6 +324,7 @@
                 deleteIdInterv: '',
                 displayDeleteInterv: false,
                 count: 0,
+                countFilters: 0,
                 displayButtonAddInterv: true
             }
         },
@@ -346,15 +347,13 @@
                     confirmDisplayButton = store.getters.getterDisplayDelete
 
 
-                //recherche global non vide et recherche par colonne non vide ? + pagination.
-
                 getCurPage === 1 ? this.curPage = 1 : ''
                 selectVal === 0 ? selectVal = 10 : 0
                 store.commit('sendTotalPages', totalInterventions)
 
                 //display confirm button 'delete interv'
                 confirmDisplayButton === true ? this.confirmDeleteInterventions = true : this.confirmDeleteInterventions = false
-
+                //delete interv with checkbox
                 if(deleteIntervId.length !== 0 && this.clickDelete === true) {
                     for(let i = 0; i < deleteIntervId.length; i++){
                         for(let y = 0; y < this.interventions.length; y++){
@@ -372,6 +371,7 @@
                 }
 
 
+                //searchByColumn
                 if(searchColumn === true){
 
                     return tabSearch.slice(0, selectVal)
@@ -449,7 +449,10 @@
         },
         methods:{
             displayFilters(){
-                return this.filters = true
+
+                this.countFilters++
+
+                if(this.countFilters === 2){ this.countFilters = 0; return this.filters = false }else{ return this.filters = true }
             },
             returnColumnNames(index) {
 
@@ -485,17 +488,16 @@
                     tabResult = []
 
                 if(input.trim().length === 0){
-                    console.log('la')
-                    //store.commit('editTabSearch', this.interventions)
-                    return this.interventions
+                    this.searchErrorMsg = false
+                    store.commit('editTabSearch', this.interventions)
+                    return ''
+    //                    A faire : recherches par plusieurs mots clés
     //                    for(var key in this.searchInColumn) {
     //                        //this.searchByColumns(key)
     //                        //push index input not empty ?
     //                    }
                 }
 
-
-                if(tabResult)
                 tabSearch.map(function(interv){
 
                     if(columnNames === 'client'){
@@ -639,7 +641,7 @@
         template: `
         <div>
             <div>
-                <input type="text" placeholder="search" v-model="searchInTab">
+                <input type="text" placeholder="Recherche" v-model="searchInTab">
                 <div>
                     <button @click="displayFilters()" class="btn btn-secondary">Filtres</button>
                 </div>
