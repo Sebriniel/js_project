@@ -44,7 +44,6 @@
             searchColumn: false,
             stockDeleteId: [],
             confirmDeleteInterv: false,
-            idInterv: 0,
             boolEditInterv: false,
             buttonAddInterv: false
         },
@@ -73,9 +72,6 @@
             getterIndex: state => {
                 return state.index
             },
-            getterIdInterv: state => {
-                return state.idInterv
-            },
             getterTabSearch: state => {
                 return state.tabSearch
             },
@@ -93,9 +89,6 @@
             },
             getterBoolEditInterv: state => {
                 return state.boolEditInterv
-            },
-            getterButtonAddInterv: state => {
-                return state.buttonAddInterv
             }
         },
         mutations: {
@@ -122,9 +115,6 @@
             },
             editIndex: (state, newValue) => {
                 state.index = newValue
-            },
-            editIdInterv: (state, newValue) => {
-                state.idInterv = newValue
             },
             editTabSearch: (state, newValue) => {
                 state.tabSearch = newValue
@@ -662,7 +652,7 @@
                     <th :class="[filters ? 'displayNone' : '']" v-for="columnName, index in searchInputsNames">{{columnName}}
                         <span @click="orderByColumn(index)" :class="['arrow', boolArrow[index] ? 'orderAsc' : 'orderDsc']"></span>
                     </th>
-                    <th :class="[filters ? '' : 'displayNone']" v-for="(columnName, index) in searchInputsNames">
+                    <th :class="['searchColumn', filters ? '' : 'displayNone']" v-for="(columnName, index) in searchInputsNames">
                         <input
                         type="text"
                         :ref="returnColumnNames(index)"
