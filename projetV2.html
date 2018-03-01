@@ -481,7 +481,7 @@
                     this.searchErrorMsg = false
                     store.commit('editTabSearch', this.interventions)
                     return ''
-    //                    A faire : recherches par plusieurs mots clés
+    //                    A faire : recherches avec plusieurs mots clés
     //                    for(var key in this.searchInColumn) {
     //                        //this.searchByColumns(key)
     //                        //push index input not empty ?
@@ -494,7 +494,7 @@
 
                         let prenom =  interv[columnNames][0].prenom.toLowerCase() + ' ' +  interv[columnNames][0].nom.toLowerCase()
 
-                        var search = prenom.indexOf(input)
+                        let search = prenom.indexOf(input)
 
                         search !== -1 ? tabResult.push(interv) : ''
 
@@ -505,7 +505,7 @@
                         }
                     }else{
 
-                        var search = interv[columnNames].toLowerCase().indexOf(input)
+                        let search = interv[columnNames].toLowerCase().indexOf(input)
 
                         search !== -1 ? tabResult.push(interv) : ''
                     }
@@ -531,12 +531,12 @@
                 let bool = this.boolArrow[index]
 
 
-                this.interventions.sort(function(a, b){
+                this.interventions.sort(function(intervOne, intervTwo){
 
                     if(columnNames === 'date_debut' || columnNames === 'date_fin') {
 
-                        let dateA = moment(a[columnNames], "DD-MM-YYYY").format("YYYY-MM-DD"),
-                            dateB = moment(b[columnNames], "DD-MM-YYYY").format("YYYY-MM-DD")
+                        let dateA = moment(intervOne[columnNames], "DD-MM-YYYY").format("YYYY-MM-DD"),
+                            dateB = moment(intervTwo[columnNames], "DD-MM-YYYY").format("YYYY-MM-DD")
 
                         if(bool === true){
                             return new Date(dateA) - new Date(dateB)
@@ -547,11 +547,11 @@
                     }else{
 
                         if(columnNames === 'client'){
-                            var nameA = a['client'][0].nom,
-                                nameB = b['client'][0].nom
+                            var nameA = intervOne['client'][0].nom,
+                                nameB = intervTwo['client'][0].nom
                         }else{
-                            var nameA = a[columnNames],
-                                nameB = b[columnNames]
+                            var nameA = intervOne[columnNames],
+                                nameB = intervTwo[columnNames]
                         }
 
                         if(bool === true){
@@ -666,7 +666,9 @@
                  :key="index">
                 </intervention>
                 <p :class="[searchErrorMsg ? 'searchError' : 'displayNone']">Aucun résultat pour votre recherche</p>
-                <button @click="confirmDeleteInterv()" :class="['btn btn-secondary', confirmDeleteInterventions ? 'deleteInterv' : 'displayNone']">Supprimer les interventions</button>
+                <button @click="confirmDeleteInterv()"
+                :class="['btn btn-secondary', confirmDeleteInterventions ? 'deleteInterv' : 'displayNone']">Supprimer les interventions
+                </button>
 
             </table>
         </div>`,
