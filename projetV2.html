@@ -636,10 +636,7 @@
                     <button @click="displayFilters()" class="btn btn-secondary">Filtres</button>
                 </div>
                 <div>
-                    <input type="text"
-                    placeholder="Numéro de l'intervention"
-                    v-model="deleteIdInterv"
-                    :class="[displayDeleteInterv ? '' : 'displayNone']">
+                    <input type="text" placeholder="Numéro de l'intervention" v-model="deleteIdInterv" :class="[displayDeleteInterv ? '' : 'displayNone']">
                     <input type="submit" class="btn btn-secondary" value="Supprimer une intervention" @click="catchRemove()">
                 </div>
                 <div>
@@ -653,12 +650,7 @@
                         <span @click="orderByColumn(index)" :class="['arrow', boolArrow[index] ? 'orderAsc' : 'orderDsc']"></span>
                     </th>
                     <th :class="['searchColumn', filters ? '' : 'displayNone']" v-for="(columnName, index) in searchInputsNames">
-                        <input
-                        type="text"
-                        :ref="returnColumnNames(index)"
-                        v-on:input="searchByColumns(index)"
-                        :placeholder="columnName"
-                        v-model="searchInColumn[index]"/>
+                        <input type="text" :ref="returnColumnNames(index)" v-on:input="searchByColumns(index)" :placeholder="columnName" v-model="searchInColumn[index]"/>
                     </th>
                 </tr>
 
